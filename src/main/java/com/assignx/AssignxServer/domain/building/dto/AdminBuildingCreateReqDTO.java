@@ -1,0 +1,23 @@
+package com.assignx.AssignxServer.domain.building.dto;
+
+import com.assignx.AssignxServer.domain.building.entity.Building;
+import com.assignx.AssignxServer.domain.room.dto.AdminRoomCreateReqDTO;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.util.List;
+
+public record AdminBuildingCreateReqDTO(
+        @NotNull
+        int buildingNumber,
+        @NotBlank
+        String buildingName,
+        @NotNull
+        List<AdminRoomCreateReqDTO> rooms
+) {
+    public Building toEntity() {
+        return Building.builder()
+                .buildingNumber(buildingNumber)
+                .buildingName(buildingName)
+                .build();
+    }
+}
