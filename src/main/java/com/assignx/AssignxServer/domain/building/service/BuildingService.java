@@ -89,7 +89,7 @@ public class BuildingService {
         building.update(dto);
 
         // 강의실 수정
-        List<AdminRoomResDTO> updatedRooms = roomService.updateRoomByAdmin(dto.rooms());
+        List<AdminRoomResDTO> updatedRooms = roomService.updateRoom(dto.rooms());
 
         return AdminBuildingResDTO.fromEntity(building, updatedRooms);
     }

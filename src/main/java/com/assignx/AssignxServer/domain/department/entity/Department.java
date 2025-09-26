@@ -1,5 +1,6 @@
 package com.assignx.AssignxServer.domain.department.entity;
 
+import com.assignx.AssignxServer.domain.department.dto.DepartmentReqDTO;
 import com.assignx.AssignxServer.domain.member.entity.Member;
 import com.assignx.AssignxServer.domain.room.entity.Room;
 import jakarta.persistence.Column;
@@ -42,5 +43,9 @@ public class Department {
         this.major = major;
     }
 
+    public void update(DepartmentReqDTO dto) {
+        this.college = dto.college();
+        this.major = dto.major();
+    }
 
 }

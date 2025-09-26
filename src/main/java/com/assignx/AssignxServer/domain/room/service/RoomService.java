@@ -1,6 +1,7 @@
 package com.assignx.AssignxServer.domain.room.service;
 
 import com.assignx.AssignxServer.domain.building.entity.Building;
+import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.domain.room.dto.AdminRoomCreateReqDTO;
 import com.assignx.AssignxServer.domain.room.dto.AdminRoomReqDTO;
 import com.assignx.AssignxServer.domain.room.dto.AdminRoomResDTO;
@@ -52,7 +53,18 @@ public class RoomService {
         List<Room> rooms = roomRepository.findAllByBuilding(building);
         return rooms.stream().map(AdminRoomResDTO::fromEntity).toList();
     }
-    
+
+    /**
+     * 특정 학과에 속한 모든 강의실 목록을 조회합니다. ADMIN 권한으로 호출됩니다.
+     *
+     * @param department 강의실 목록을 조회할 대상 학과 엔티티.
+     * @return 해당 학과에 속한 모든 강의실 정보를 담은 {@link AdminRoomResDTO} 리스트.
+     */
+    public List<AdminRoomResDTO> getRoomsByDepartment(Department department) {
+        List<Room> rooms = roomRepository.findAllByDepartment(department);
+        return rooms.stream().map(AdminRoomResDTO::fromEntity).toList();
+    }
+
     /**
      * 강의실 정보를 업데이트합니다. ADMIN 권한으로 호출됩니다.
      *
@@ -60,11 +72,29 @@ public class RoomService {
      * @return 업데이트된 {@link AdminRoomResDTO} 객체.
      */
     @Transactional
-    public List<AdminRoomResDTO> updateRoomByAdmin(List<AdminRoomReqDTO> dtos) {
+    public List<AdminRoomResDTO> updateRoom(List<AdminRoomReqDTO> dtos) {
         List<AdminRoomResDTO> rooms = new ArrayList<>();
         for (AdminRoomReqDTO dto : dtos) {
             Room room = roomRepository.findById(dto.roomId()).orElseThrow(RoomExceptionUtils::RoomNotExist);
             room.update(dto);
+            rooms.add(AdminRoomResDTO.fromEntity(room));
+        }
+        return rooms;
+    }
+
+    /**
+     * 강의실의 학과 정보를 업데이트합니다. ADMIN 권한으로 호출됩니다.
+     *
+     * @param roomIds    업데이트할 강의실 ID를 담고 있는 리스트.
+     * @param department 업데이트할 학과 정보를 담고 있는 객체.
+     * @return 업데이트된 {@link AdminRoomResDTO} 객체.
+     */
+    @Transactional
+    public List<AdminRoomResDTO> updateDepartment(List<Long> roomIds, Department department) {
+        List<AdminRoomResDTO> rooms = new ArrayList<>();
+        for (Long id : roomIds) {
+            Room room = roomRepository.findById(id).orElseThrow(RoomExceptionUtils::RoomNotExist);
+            room.update(department);
             rooms.add(AdminRoomResDTO.fromEntity(room));
         }
         return rooms;

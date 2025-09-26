@@ -1,6 +1,7 @@
 package com.assignx.AssignxServer.domain.room.repository;
 
 import com.assignx.AssignxServer.domain.building.entity.Building;
+import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.domain.room.entity.Room;
 import java.util.List;
 import java.util.Optional;
@@ -10,4 +11,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<Object> findByBuildingAndRoomNumber(Building building, String roomNumber);
 
     List<Room> findAllByBuilding(Building building);
+
+    List<Room> findAllByDepartment(Department department);
 }
