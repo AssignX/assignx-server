@@ -60,6 +60,7 @@ Content-Type:application/json
 > {%
     client.test("Response status is 200", function () {
         client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.buildingName === "수정된 테스트 건물");
     });
 %}
 
