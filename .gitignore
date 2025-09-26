@@ -39,3 +39,4 @@ out/
 
 ### env ###
 .env
+http/*env.json
