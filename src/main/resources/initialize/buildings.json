@@ -1,0 +1,185 @@
+[
+  {
+    "buildingNumber": 401,
+    "buildingName": "공대2호관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 402,
+    "buildingName": "공대2A호관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 403,
+    "buildingName": "P/P 구조실습실",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 404,
+    "buildingName": "공대1호관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 405,
+    "buildingName": "연구실안전관리센터",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 406,
+    "buildingName": "공대9호관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 407,
+    "buildingName": "화학관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 408,
+    "buildingName": "공대12호관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 409,
+    "buildingName": "공대3호관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 410,
+    "buildingName": "공대6호관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 411,
+    "buildingName": "공대7호관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 412,
+    "buildingName": "미래창직관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 413,
+    "buildingName": "IT대학3호관(공대11호관)",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 414,
+    "buildingName": "IT대학4호관(제2학생회관)",
+    "rooms": [
+      {
+        "roomNumber": "104",
+        "roomCapacity": 66
+      },
+      {
+        "roomNumber": "108",
+        "roomCapacity": 37
+      },
+      {
+        "roomNumber": "106",
+        "roomCapacity": 48
+      }
+    ]
+  },
+  {
+    "buildingNumber": 415,
+    "buildingName": "IT대학5호관(IT융복합관)",
+    "rooms": [
+      {
+        "roomNumber": "B101",
+        "roomCapacity": 140
+      },
+      {
+        "roomNumber": "B102",
+        "roomCapacity": 140
+      },
+      {
+        "roomNumber": "224",
+        "roomCapacity": 62
+      },
+      {
+        "roomNumber": "225",
+        "roomCapacity": 62
+      },
+      {
+        "roomNumber": "245",
+        "roomCapacity": 75
+      },
+      {
+        "roomNumber": "248",
+        "roomCapacity": 75
+      },
+      {
+        "roomNumber": "251",
+        "roomCapacity": 75
+      },
+      {
+        "roomNumber": "342",
+        "roomCapacity": 70
+      },
+      {
+        "roomNumber": "345",
+        "roomCapacity": 70
+      },
+      {
+        "roomNumber": "348",
+        "roomCapacity": 70
+      },
+      {
+        "roomNumber": "351",
+        "roomCapacity": 70
+      },
+      {
+        "roomNumber": "355",
+        "roomCapacity": 63
+      },
+      {
+        "roomNumber": "301",
+        "roomCapacity": 40
+      },
+      {
+        "roomNumber": "309",
+        "roomCapacity": 40
+      },
+      {
+        "roomNumber": "324",
+        "roomCapacity": 64
+      },
+      {
+        "roomNumber": "407",
+        "roomCapacity": 36
+      }
+    ]
+  },
+  {
+    "buildingNumber": 416,
+    "buildingName": "IT대학2호관(공대5호관)",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 417,
+    "buildingName": "반도체연구동",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 418,
+    "buildingName": "IT대학2호관(공대5호관)",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 419,
+    "buildingName": "공대8호관",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 420,
+    "buildingName": "수의과대학",
+    "rooms": []
+  },
+  {
+    "buildingNumber": 421,
+    "buildingName": "수의과대학부속동물병원",
+    "rooms": []
+  }
+]
