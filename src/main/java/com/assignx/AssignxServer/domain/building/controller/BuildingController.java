@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-@Tag(name = "건물", description = "어드민 건물 관리 API")
+@Tag(name = "Building", description = "건물 관리 API")
 public class BuildingController {
 
     private final BuildingService buildingService;
