@@ -1,6 +1,7 @@
 package com.assignx.AssignxServer.domain.department.entity;
 
 import com.assignx.AssignxServer.domain.member.entity.Member;
+import com.assignx.AssignxServer.domain.room.entity.Room;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +32,9 @@ public class Department {
 
     @OneToMany(mappedBy = "department")
     private List<Member> members;
+
+    @OneToMany(mappedBy = "department")
+    private List<Room> rooms;
 
     @Builder
     public Department(String college, String major) {

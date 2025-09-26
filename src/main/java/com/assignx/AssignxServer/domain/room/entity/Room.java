@@ -1,6 +1,7 @@
 package com.assignx.AssignxServer.domain.room.entity;
 
 import com.assignx.AssignxServer.domain.building.entity.Building;
+import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.domain.room.dto.AdminRoomReqDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,8 +33,12 @@ public class Room {
     private int roomCapacity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "building_id")
+    @JoinColumn(name = "building_id", nullable = false)
     private Building building;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
 
     @Builder
     public Room(String roomNumber, int roomCapacity, Building building) {
@@ -45,5 +50,9 @@ public class Room {
     public void update(AdminRoomReqDTO dto) {
         this.roomNumber = dto.roomNumber();
         this.roomCapacity = dto.roomCapacity();
+    }
+
+    public void update(Department department) {
+        this.department = department;
     }
 }
