@@ -1,0 +1,78 @@
+### POST 학과 추가
+POST {{host}}/api/admin/department
+Content-Type: application/json
+
+{
+  "college": "IT대학",
+  "major": "컴퓨터학부",
+  "employeeIds": [],
+  "roomIds": [
+    17
+  ]
+}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.global.set("created_department_id", response.body.departmentId)
+    client.log(response.body)
+%}
+
+### GET 학과 목록 조회
+GET {{host}}/api/admin/department
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### GET 학과 상세 조회 - IT대학 컴퓨터학부
+GET {{host}}/api/admin/department/{{created_department_id}}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### PUT 학과 수정
+PUT {{host}}/api/admin/department
+Content-Type: application/json
+
+{
+  "departmentId": {{created_department_id}},
+  "college": "IT대학",
+  "major": "수정된 컴퓨터학부",
+  "employeeIds": [],
+  "roomIds": [
+    17
+  ]
+}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.major === "수정된 컴퓨터학부");
+    });
+%}
+
+### GET 수정된 학과 상세 조회 - IT대학 컴퓨터학부
+GET {{host}}/api/admin/department/{{created_department_id}}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.major === "수정된 컴퓨터학부");
+    });
+%}
+
+### DELETE 학과 삭제
+DELETE {{host}}/api/admin/department/{{created_department_id}}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
