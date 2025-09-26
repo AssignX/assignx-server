@@ -25,8 +25,10 @@ public class Building {
     @Column(name = "building_id")
     private Long id;
 
+    @Column(nullable = false)
     private int buildingNumber;
 
+    @Column(nullable = false)
     private String buildingName;
 
     @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -25,8 +25,10 @@ public class Room {
     @Column(name = "room_id")
     private Long id;
 
+    @Column(nullable = false)
     private String roomNumber;
 
+    @Column(nullable = false)
     private int roomCapacity;
 
     @ManyToOne(fetch = FetchType.LAZY)
