@@ -80,9 +80,9 @@ public class BuildingService {
      * @return 업데이트된 {@link AdminBuildingResDTO} 객체.
      */
     @Transactional
-    public AdminBuildingResDTO updateBuilding(Long buildingId, AdminBuildingReqDTO dto) {
+    public AdminBuildingResDTO updateBuilding(AdminBuildingReqDTO dto) {
         // 건물 조회
-        Building building = buildingRepository.findById(buildingId)
+        Building building = buildingRepository.findById(dto.buildingId())
                 .orElseThrow(BuildingExceptionUtils::BuildingNotExist);
 
         // 건물 수정

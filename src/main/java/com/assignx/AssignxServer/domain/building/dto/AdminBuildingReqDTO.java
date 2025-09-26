@@ -7,6 +7,8 @@ import java.util.List;
 
 public record AdminBuildingReqDTO(
         @NotNull
+        Long buildingId,
+        @NotNull
         int buildingNumber,
         @NotBlank
         String buildingName,

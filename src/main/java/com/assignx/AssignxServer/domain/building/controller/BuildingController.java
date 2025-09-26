@@ -22,42 +22,41 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/building")
+@RequestMapping("/api")
 @Tag(name = "건물", description = "어드민 건물 관리 API")
 public class BuildingController {
 
     private final BuildingService buildingService;
 
-    @PostMapping
-    @Operation(summary = "건물 정보 추가", description = "새로운 건물과 강의실 정보를 추가합니다.")
+    @PostMapping("/admin/building")
+    @Operation(summary = "건물 추가", description = "새로운 건물과 강의실 정보를 추가합니다.")
     public ResponseEntity<AdminBuildingResDTO> addBuilding(@Valid @RequestBody AdminBuildingCreateReqDTO dto) {
         AdminBuildingResDTO res = buildingService.addBuilding(dto);
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping
+    @GetMapping("/building")
     @Operation(summary = "건물 목록 조회", description = "건물 목록을 조회합니다.")
     public ResponseEntity<List<AdminBuildingListResDTO>> getAllBuilding() {
         List<AdminBuildingListResDTO> res = buildingService.getAllBuilding();
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/{buildingId}")
+    @GetMapping("/building/{buildingId}")
     @Operation(summary = "건물 상세 조회", description = "특정 건물에 대한 정보를 조회합니다.")
     public ResponseEntity<AdminBuildingResDTO> getBuilding(@PathVariable("buildingId") Long buildingId) {
         AdminBuildingResDTO res = buildingService.getBuilding(buildingId);
         return ResponseEntity.ok(res);
     }
 
-    @PutMapping("/{buildingId}")
+    @PutMapping("/admin/building")
     @Operation(summary = "건물 수정", description = "특정 건물에 대한 정보를 수정합니다.")
-    public ResponseEntity<AdminBuildingResDTO> updateBuilding(@PathVariable("buildingId") Long buildingId,
-                                                              @Valid @RequestBody AdminBuildingReqDTO dto) {
-        AdminBuildingResDTO res = buildingService.updateBuilding(buildingId, dto);
+    public ResponseEntity<AdminBuildingResDTO> updateBuilding(@Valid @RequestBody AdminBuildingReqDTO dto) {
+        AdminBuildingResDTO res = buildingService.updateBuilding(dto);
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/{buildingId}")
+    @DeleteMapping("/admin/building/{buildingId}")
     @Operation(summary = "건물 삭제", description = "특정 건물에 대한 정보를 삭제합니다.")
     public ResponseEntity<Void> deleteBuilding(@PathVariable("buildingId") Long buildingId) {
         buildingService.deleteBuilding(buildingId);
