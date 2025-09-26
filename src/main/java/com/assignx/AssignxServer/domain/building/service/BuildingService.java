@@ -50,7 +50,7 @@ public class BuildingService {
     /**
      * 모든 건물을 조회합니다. ADMIN 권한으로 호출됩니다.
      *
-     * @return 모든 {@link AdminBuildingListResDTO} 객체 리스트.
+     * @return 조회된 모든 {@link AdminBuildingListResDTO} 객체 리스트.
      */
     public List<AdminBuildingListResDTO> getAllBuilding() {
         List<Building> buildingList = buildingRepository.findAll();
