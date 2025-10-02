@@ -2,6 +2,7 @@ package com.assignx.AssignxServer.domain.building.entity;
 
 import com.assignx.AssignxServer.domain.building.dto.AdminBuildingReqDTO;
 import com.assignx.AssignxServer.domain.room.entity.Room;
+import com.assignx.AssignxServer.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Building {
+public class Building extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
