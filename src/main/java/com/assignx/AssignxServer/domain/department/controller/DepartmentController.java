@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/admin/department")
-@Tag(name = "Department Admin", description = "학과 관리 API")
-public class DepartmentAdminController {
+@RequestMapping("/api/department/admin")
+@Tag(name = "Department", description = "학과 API")
+public class DepartmentController {
 
     private final DepartmentService departmentService;
 
