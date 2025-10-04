@@ -1,5 +1,5 @@
 ### POST 건물 추가
-POST {{host}}/api/admin/building
+POST {{host}}/api/building/admin
 Content-Type:application/json
 
 {
@@ -14,12 +14,38 @@ Content-Type:application/json
 }
 
 > {%
-    client.test("Response status is 200", function () {
-        client.assert(response.status === 200, "Response status is not 200");
+    client.test("Response status is 201", function () {
+        client.assert(response.status === 201, "Response status is not 200");
     });
+    client.test("Check created data", function () {
+        client.assert(response.body.buildingNumber === 999, "Created buildingNumber does not match the requested buildingNumber.")
+        client.assert(response.body.buildingName === "테스트 건물", "Created buildingName does not match the requested buildingName.")
+        client.assert(response.body.rooms[0].roomNumber === "100", "Created roomNumber does not match the requested roomNumber.")
+        client.assert(response.body.rooms[0].roomCapacity === 10, "Created roomCapacity does not match the requested roomCapacity.")
+    })
     client.global.set("created_building_id", response.body.buildingId)
-    client.log(response.body.rooms[0].roomId)
     client.global.set("created_roomId", response.body.rooms[0].roomId)
+%}
+
+### POST 건물 추가 중복 체크
+POST {{host}}/api/building/admin
+Content-Type:application/json
+
+{
+  "buildingNumber": 999,
+  "buildingName": "테스트 건물",
+  "rooms": [
+    {
+      "roomNumber": "100",
+      "roomCapacity": 10
+    }
+  ]
+}
+
+> {%
+    client.test("Response status is 409", function () {
+        client.assert(response.status === 409, "Response status is not 409");
+    });
 %}
 
 ### GET 건물 목록 조회
@@ -29,19 +55,55 @@ GET {{host}}/api/building
     client.test("Response status is 200", function () {
         client.assert(response.status === 200, "Response status is not 200");
     });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.length > 0, "There is no data retrieved");
+    })
+
 %}
 
-### GET 건물 상세 조회 - IT대학5호관(IT융복합관)
+### GET 건물 상세 조회
 GET {{host}}/api/building/{{created_building_id}}
 
 > {%
     client.test("Response status is 200", function () {
         client.assert(response.status === 200, "Response status is not 200");
     });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.buildingNumber === 999, "Created buildingNumber does not match the requested buildingNumber.")
+        client.assert(response.body.buildingName === "테스트 건물", "Created buildingName does not match the requested buildingName.")
+        client.assert(response.body.rooms[0].roomNumber === "100", "Created roomNumber does not match the requested roomNumber.")
+        client.assert(response.body.rooms[0].roomCapacity === 10, "Created roomCapacity does not match the requested roomCapacity.")
+    })
+%}
+
+### POST 건물 검색 (이름)
+POST {{host}}/api/building/search?name=테스트 건물
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Found building", function () {
+        const expectedId = client.global.get("created_building_id");
+        client.assert(response.body[0].buildingId === Number(expectedId), "Found ID does not match the created ID.")
+    })
+%}
+
+### POST 건물 검색 (번호)
+POST {{host}}/api/building/search?number=999
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Found building", function () {
+        const expectedId = client.global.get("created_building_id");
+        client.assert(response.body[0].buildingId === Number(expectedId), "Found ID does not match the created ID.")
+    })
 %}
 
 ### PUT 건물 수정
-PUT {{host}}/api/admin/building
+PUT {{host}}/api/building/admin
 Content-Type:application/json
 
 {
@@ -60,21 +122,17 @@ Content-Type:application/json
 > {%
     client.test("Response status is 200", function () {
         client.assert(response.status === 200, "Response status is not 200");
-        client.assert(response.body.buildingName === "수정된 테스트 건물");
     });
-%}
-
-### GET 수정된 건물 상세 조회 - IT대학5호관(IT융복합관)
-GET {{host}}/api/building/{{created_building_id}}
-
-> {%
-    client.test("Response status is 200", function () {
-        client.assert(response.status === 200, "Response status is not 200");
-    });
+    client.test("Check updated data", function () {
+        client.assert(response.body.buildingNumber === 999, "Updated buildingNumber does not match the requested buildingNumber.")
+        client.assert(response.body.buildingName === "수정된 테스트 건물", "Updated buildingName does not match the requested buildingName.")
+        client.assert(response.body.rooms[0].roomNumber === "100", "Updated roomNumber does not match the requested roomNumber.")
+        client.assert(response.body.rooms[0].roomCapacity === 10, "Updated roomCapacity does not match the requested roomCapacity.")
+    })
 %}
 
 ### DELETE 건물 삭제
-DELETE {{host}}/api/admin/building/{{created_building_id}}
+DELETE {{host}}/api/building/admin/{{created_building_id}}
 
 > {%
     client.test("Response status is 200", function () {

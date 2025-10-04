@@ -1,6 +1,6 @@
 package com.assignx.AssignxServer.domain.building.entity;
 
-import com.assignx.AssignxServer.domain.building.dto.AdminBuildingReqDTO;
+import com.assignx.AssignxServer.domain.building.dto.BuildingReqDTO;
 import com.assignx.AssignxServer.domain.room.entity.Room;
 import com.assignx.AssignxServer.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
@@ -41,7 +41,7 @@ public class Building extends BaseTimeEntity {
         this.buildingName = buildingName;
     }
 
-    public void update(AdminBuildingReqDTO dto) {
+    public void update(BuildingReqDTO dto) {
         this.buildingNumber = dto.buildingNumber();
         this.buildingName = dto.buildingName();
     }
