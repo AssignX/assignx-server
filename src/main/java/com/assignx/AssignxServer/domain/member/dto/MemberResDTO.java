@@ -1,6 +1,5 @@
 package com.assignx.AssignxServer.domain.member.dto;
 
-import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.domain.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,13 +12,16 @@ public record MemberResDTO(
         @NotBlank
         String name,
         @NotBlank
+        String idNumber,
+        @NotBlank
         String departmentName
 ) {
-    public static MemberResDTO fromEntity(Member member, Department department) {
+    public static MemberResDTO fromEntity(Member member) {
         return MemberResDTO.builder()
                 .memberId(member.getId())
                 .name(member.getName())
-                .departmentName(department.getMajor())
+                .idNumber(member.getIdNumber())
+                .departmentName(member.getDepartment().getMajor())
                 .build();
     }
 
