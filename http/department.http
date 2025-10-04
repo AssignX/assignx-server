@@ -1,10 +1,32 @@
 ### POST 학과 추가
-POST {{host}}/api/admin/department
+POST {{host}}/api/department/admin
 Content-Type: application/json
 
 {
-  "college": "IT대학",
-  "major": "컴퓨터학부",
+  "college": "테스트 대학",
+  "major": "테스트 학과",
+  "employeeIds": [],
+  "roomIds": []
+}
+
+> {%
+    client.test("Response status is 201", function () {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+    client.test("Check created data", function () {
+        client.assert(response.body.college === "테스트 대학", "Created college does not match the requested college.")
+        client.assert(response.body.major === "테스트 학과", "Created major does not match the requested major.")
+    })
+    client.global.set("created_department_id", response.body.departmentId)
+%}
+
+### POST 학과 추가 중복 체크
+POST {{host}}/api/department/admin
+Content-Type: application/json
+
+{
+  "college": "테스트 대학",
+  "major": "테스트 학과",
   "employeeIds": [],
   "roomIds": [
     17
@@ -12,64 +34,60 @@ Content-Type: application/json
 }
 
 > {%
-    client.test("Response status is 200", function () {
-        client.assert(response.status === 200, "Response status is not 200");
+    client.test("Response status is 409", function () {
+        client.assert(response.status === 409, "Response status is not 409");
     });
-    client.global.set("created_department_id", response.body.departmentId)
-    client.log(response.body)
 %}
 
 ### GET 학과 목록 조회
-GET {{host}}/api/admin/department
+GET {{host}}/api/department/admin
 
 > {%
     client.test("Response status is 200", function () {
         client.assert(response.status === 200, "Response status is not 200");
     });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.length > 0, "There is no data retrieved");
+    })
 %}
 
-### GET 학과 상세 조회 - IT대학 컴퓨터학부
-GET {{host}}/api/admin/department/{{created_department_id}}
+### GET 학과 상세 조회
+GET {{host}}/api/department/admin/{{created_department_id}}
 
 > {%
     client.test("Response status is 200", function () {
         client.assert(response.status === 200, "Response status is not 200");
     });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.college === "테스트 대학", "Retrieved college does not match the requested college.")
+        client.assert(response.body.major === "테스트 학과", "Retrieved major does not match the requested major.")
+    })
 %}
 
 ### PUT 학과 수정
-PUT {{host}}/api/admin/department
+PUT {{host}}/api/department/admin
 Content-Type: application/json
 
 {
   "departmentId": {{created_department_id}},
-  "college": "IT대학",
-  "major": "수정된 컴퓨터학부",
+  "college": "수정된 테스트 대학",
+  "major": "수정된 테스트 학과",
   "employeeIds": [],
-  "roomIds": [
-    17
-  ]
+  "roomIds": []
 }
 
 > {%
     client.test("Response status is 200", function () {
         client.assert(response.status === 200, "Response status is not 200");
-        client.assert(response.body.major === "수정된 컴퓨터학부");
     });
-%}
-
-### GET 수정된 학과 상세 조회 - IT대학 컴퓨터학부
-GET {{host}}/api/admin/department/{{created_department_id}}
-
-> {%
-    client.test("Response status is 200", function () {
-        client.assert(response.status === 200, "Response status is not 200");
-        client.assert(response.body.major === "수정된 컴퓨터학부");
-    });
+    client.test("Check updated data", function () {
+        client.assert(response.body.college === "수정된 테스트 대학", "Updated college does not match the requested college.")
+        client.assert(response.body.major === "수정된 테스트 학과", "Updated major does not match the requested major.")
+    })
 %}
 
 ### DELETE 학과 삭제
-DELETE {{host}}/api/admin/department/{{created_department_id}}
+DELETE {{host}}/api/department/admin/{{created_department_id}}
 
 > {%
     client.test("Response status is 200", function () {
