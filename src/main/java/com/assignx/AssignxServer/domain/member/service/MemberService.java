@@ -7,6 +7,7 @@ import com.assignx.AssignxServer.domain.member.dto.MemberResDTO;
 import com.assignx.AssignxServer.domain.member.entity.Member;
 import com.assignx.AssignxServer.domain.member.entity.Role;
 import com.assignx.AssignxServer.domain.member.repository.MemberRepository;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,12 +29,20 @@ public class MemberService {
      * @return 조회된 모든 {@link MemberResDTO} 객체 리스트.
      */
     public List<MemberResDTO> getAllEmployeesByNameOrDepartment(String name, Long departmentId) {
-        // 학과 존재 확인
-        Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(DepartmentExceptionUtils::DepartmentNotExist);
+        List<Member> members = new ArrayList<>();
 
-        // Role, name, departmentId로 EMPLOYEE 목록 조회
-        List<Member> members = memberRepository.findByRoleAndNameAndDepartment(Role.EMPLOYEE, name, department);
+        // 이름으로 조회한 경우
+        if (name != null && !name.isBlank()) {
+            members = memberRepository.findByRoleAndName(Role.EMPLOYEE, name);
+        }
+        // 소속으로 조회한 경우
+        else if (departmentId != null) {
+            // 학과 존재 확인
+            Department department = departmentRepository.findById(departmentId)
+                    .orElseThrow(DepartmentExceptionUtils::DepartmentNotExist);
+            members = memberRepository.findByRoleAndDepartment(Role.EMPLOYEE, department);
+        }
+
         return members.stream().map(MemberResDTO::fromEntity).toList();
     }
 
