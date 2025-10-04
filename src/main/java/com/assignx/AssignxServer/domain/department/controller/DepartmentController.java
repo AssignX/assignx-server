@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class DepartmentController {
     @Operation(summary = "학과 추가", description = "새로운 학과 정보를 추가합니다.")
     public ResponseEntity<DepartmentResDTO> addDepartment(@Valid @RequestBody DepartmentCreateReqDTO dto) {
         DepartmentResDTO res = departmentService.addDepartment(dto);
-        return ResponseEntity.ok(res);
+        return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
     @GetMapping()
