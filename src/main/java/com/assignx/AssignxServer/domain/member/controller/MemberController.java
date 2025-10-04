@@ -23,7 +23,8 @@ public class MemberController {
     @PostMapping("/search/employee")
     @Operation(summary = "직원 조회", description = "직원 정보를 조회합니다.")
     public ResponseEntity<List<MemberResDTO>> getAllEmployeesByNameOrDepartment(
-            @RequestParam String name, Long departmentId) {
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long departmentId) {
         List<MemberResDTO> res = memberService.getAllEmployeesByNameOrDepartment(name, departmentId);
         return ResponseEntity.ok(res);
     }
