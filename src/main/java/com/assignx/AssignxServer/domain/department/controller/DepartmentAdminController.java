@@ -22,27 +22,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
-@Tag(name = "Department", description = "어드민 학과 관리 API")
-public class DepartmentController {
+@RequestMapping("/api/admin/department")
+@Tag(name = "Department Admin", description = "학과 관리 API")
+public class DepartmentAdminController {
 
     private final DepartmentService departmentService;
 
-    @PostMapping("/admin/department")
+    @PostMapping()
     @Operation(summary = "학과 추가", description = "새로운 학과 정보를 추가합니다.")
     public ResponseEntity<DepartmentResDTO> addDepartment(@Valid @RequestBody DepartmentCreateReqDTO dto) {
         DepartmentResDTO res = departmentService.addDepartment(dto);
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/admin/department")
+    @GetMapping()
     @Operation(summary = "학과 목록 조회", description = "학과 목록을 조회합니다.")
     public ResponseEntity<List<DepartmentListResDTO>> getAllDepartments() {
         List<DepartmentListResDTO> res = departmentService.getAllDepartments();
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/admin/department/{departmentId}")
+    @GetMapping("/{departmentId}")
     @Operation(summary = "학과 상세 조회", description = "특정 학과에 대한 정보를 조회합니다.")
     public ResponseEntity<DepartmentResDTO> getDepartment(
             @PathVariable("departmentId") Long departmentId) {
@@ -50,14 +50,14 @@ public class DepartmentController {
         return ResponseEntity.ok(res);
     }
 
-    @PutMapping("/admin/department")
+    @PutMapping()
     @Operation(summary = "학과 수정", description = "특정 학과에 대한 정보를 수정합니다.")
     public ResponseEntity<DepartmentResDTO> updateDepartment(@Valid @RequestBody DepartmentReqDTO dto) {
         DepartmentResDTO res = departmentService.updateDepartment(dto);
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/admin/department/{departmentId}")
+    @DeleteMapping("/{departmentId}")
     @Operation(summary = "학과 삭제", description = "특정 학과에 대한 정보를 삭제합니다.")
     public ResponseEntity<Void> deleteDepartment(@PathVariable("departmentId") Long departmentId) {
         departmentService.deleteDepartment(departmentId);

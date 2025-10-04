@@ -3,6 +3,7 @@ package com.assignx.AssignxServer.domain.department.entity;
 import com.assignx.AssignxServer.domain.department.dto.DepartmentReqDTO;
 import com.assignx.AssignxServer.domain.member.entity.Member;
 import com.assignx.AssignxServer.domain.room.entity.Room;
+import com.assignx.AssignxServer.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Department {
+public class Department extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
