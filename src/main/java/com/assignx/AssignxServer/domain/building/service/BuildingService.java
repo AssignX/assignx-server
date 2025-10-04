@@ -7,8 +7,10 @@ import com.assignx.AssignxServer.domain.building.dto.BuildingResDTO;
 import com.assignx.AssignxServer.domain.building.entity.Building;
 import com.assignx.AssignxServer.domain.building.exception.BuildingExceptionUtils;
 import com.assignx.AssignxServer.domain.building.repository.BuildingRepository;
+import com.assignx.AssignxServer.domain.department.repository.DepartmentRepository;
 import com.assignx.AssignxServer.domain.room.dto.AdminRoomResDTO;
 import com.assignx.AssignxServer.domain.room.service.RoomService;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BuildingService {
 
     private final BuildingRepository buildingRepository;
+    private final DepartmentRepository departmentRepository;
 
     private final RoomService roomService;
 
@@ -45,6 +48,26 @@ public class BuildingService {
         List<AdminRoomResDTO> savedRoomList = roomService.addRoomByAdmin(savedBuilding, dto.rooms());
 
         return BuildingResDTO.fromEntity(savedBuilding, savedRoomList);
+    }
+
+    /**
+     * 모든 건물을 조회합니다. ADMIN 권한으로 호출됩니다.
+     *
+     * @return 조회된 모든 {@link BuildingListResDTO} 객체 리스트.
+     */
+    public List<BuildingListResDTO> searchBuilding(String name, Integer number) {
+        List<Building> buildings = new ArrayList<>();
+
+        // 이름으로 조회한 경우
+        if (name != null && !name.isBlank()) {
+            buildings = buildingRepository.findByBuildingName(name);
+        }
+        // 번호로 조회한 경우
+        else if (number != null) {
+            buildings = buildingRepository.findByBuildingNumber(number);
+        }
+
+        return buildings.stream().map(BuildingListResDTO::fromEntity).toList();
     }
 
     /**
