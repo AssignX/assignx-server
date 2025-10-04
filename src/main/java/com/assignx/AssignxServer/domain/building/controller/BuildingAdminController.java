@@ -1,8 +1,8 @@
 package com.assignx.AssignxServer.domain.building.controller;
 
-import com.assignx.AssignxServer.domain.building.dto.AdminBuildingCreateReqDTO;
-import com.assignx.AssignxServer.domain.building.dto.AdminBuildingReqDTO;
-import com.assignx.AssignxServer.domain.building.dto.AdminBuildingResDTO;
+import com.assignx.AssignxServer.domain.building.dto.BuildingCreateReqDTO;
+import com.assignx.AssignxServer.domain.building.dto.BuildingReqDTO;
+import com.assignx.AssignxServer.domain.building.dto.BuildingResDTO;
 import com.assignx.AssignxServer.domain.building.service.BuildingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,15 +27,15 @@ public class BuildingAdminController {
 
     @PostMapping()
     @Operation(summary = "건물 추가", description = "새로운 건물과 강의실 정보를 추가합니다.")
-    public ResponseEntity<AdminBuildingResDTO> addBuilding(@Valid @RequestBody AdminBuildingCreateReqDTO dto) {
-        AdminBuildingResDTO res = buildingService.addBuilding(dto);
+    public ResponseEntity<BuildingResDTO> addBuilding(@Valid @RequestBody BuildingCreateReqDTO dto) {
+        BuildingResDTO res = buildingService.addBuilding(dto);
         return ResponseEntity.ok(res);
     }
 
     @PutMapping()
     @Operation(summary = "건물 수정", description = "특정 건물에 대한 정보를 수정합니다.")
-    public ResponseEntity<AdminBuildingResDTO> updateBuilding(@Valid @RequestBody AdminBuildingReqDTO dto) {
-        AdminBuildingResDTO res = buildingService.updateBuilding(dto);
+    public ResponseEntity<BuildingResDTO> updateBuilding(@Valid @RequestBody BuildingReqDTO dto) {
+        BuildingResDTO res = buildingService.updateBuilding(dto);
         return ResponseEntity.ok(res);
     }
 

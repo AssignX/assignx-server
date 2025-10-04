@@ -1,6 +1,6 @@
 package com.assignx.AssignxServer.global.initialize;
 
-import com.assignx.AssignxServer.domain.building.dto.AdminBuildingCreateReqDTO;
+import com.assignx.AssignxServer.domain.building.dto.BuildingCreateReqDTO;
 import com.assignx.AssignxServer.domain.building.entity.Building;
 import com.assignx.AssignxServer.domain.building.service.BuildingService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -24,11 +24,11 @@ public class BuildingInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         InputStream inputStream = new ClassPathResource("initialize/buildings.json").getInputStream();
-        List<AdminBuildingCreateReqDTO> dtos = objectMapper.readValue(inputStream, new TypeReference<>() {
+        List<BuildingCreateReqDTO> dtos = objectMapper.readValue(inputStream, new TypeReference<>() {
         });
 
         List<Building> buildingsToSave = new ArrayList<>();
-        for (AdminBuildingCreateReqDTO dto : dtos) {
+        for (BuildingCreateReqDTO dto : dtos) {
             buildingService.addBuilding(dto);
         }
 

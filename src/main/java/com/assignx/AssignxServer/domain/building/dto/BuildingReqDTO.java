@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
-public record AdminBuildingReqDTO(
+public record BuildingReqDTO(
         @NotNull
         Long buildingId,
         @NotNull
