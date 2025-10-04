@@ -20,6 +20,13 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final DepartmentRepository departmentRepository;
 
+    /**
+     * 이름 혹은 소속으로 직원을 검색합니다.
+     *
+     * @param name         조회할 직원의 이름.
+     * @param departmentId 조회할 직원의 학과 ID.
+     * @return 조회된 모든 {@link MemberResDTO} 객체 리스트.
+     */
     public List<MemberResDTO> getAllEmployeesByNameOrDepartment(String name, Long departmentId) {
         // 학과 존재 확인
         Department department = departmentRepository.findById(departmentId)
@@ -30,6 +37,12 @@ public class MemberService {
         return members.stream().map(MemberResDTO::fromEntity).toList();
     }
 
+    /**
+     * 이름으로 교수를 검색합니다.
+     *
+     * @param name 조회할 교수의 이름.
+     * @return 조회된 모든 {@link MemberResDTO} 객체 리스트.
+     */
     public List<MemberResDTO> getAllProfessorsByName(String name) {
         // Role, name으로 PROFESSOR 목록 조회
         List<Member> members = memberRepository.findByRoleAndName(Role.EMPLOYEE, name);
