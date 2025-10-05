@@ -1,5 +1,5 @@
 # 1. Build stage (Gradle)
-FROM gradle:8.7-jdk21-alpine AS build
+FROM gradle:8.7-jdk17-alpine AS build
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY src ./src
 RUN ./gradlew bootJar -x test --no-daemon
 
 # 2. Run stage
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 

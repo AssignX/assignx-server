@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      JAVA_VERSION: '21'
+      JAVA_VERSION: '17'
       DOCKER_IMAGE_REPO: ${{ secrets.DOCKER_USERNAME }}/assignx-server
 
     steps:
