@@ -2,7 +2,7 @@ package com.assignx.AssignxServer.domain.room.entity;
 
 import com.assignx.AssignxServer.domain.building.entity.Building;
 import com.assignx.AssignxServer.domain.department.entity.Department;
-import com.assignx.AssignxServer.domain.room.dto.AdminRoomReqDTO;
+import com.assignx.AssignxServer.domain.room.dto.RoomReqDTO;
 import com.assignx.AssignxServer.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,7 +51,7 @@ public class Room extends BaseTimeEntity {
         this.building = building;
     }
 
-    public void update(AdminRoomReqDTO dto) {
+    public void update(RoomReqDTO dto) {
         this.roomNumber = dto.roomNumber();
         this.roomCapacity = dto.roomCapacity();
     }

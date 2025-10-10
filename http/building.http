@@ -7,6 +7,7 @@ Content-Type:application/json
   "buildingName": "테스트 건물",
   "rooms": [
     {
+      "actionType": "CREATE",
       "roomNumber": "100",
       "roomCapacity": 10
     }
@@ -36,6 +37,7 @@ Content-Type:application/json
   "buildingName": "테스트 건물",
   "rooms": [
     {
+      "actionType": "CREATE",
       "roomNumber": "100",
       "roomCapacity": 10
     }
@@ -112,6 +114,7 @@ Content-Type:application/json
   "buildingName": "수정된 테스트 건물",
   "rooms": [
     {
+    "actionType": "UPDATE",
       "roomId": {{created_roomId}},
       "roomNumber": "100",
       "roomCapacity": 10

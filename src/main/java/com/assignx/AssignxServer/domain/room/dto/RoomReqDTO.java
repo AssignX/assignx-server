@@ -2,13 +2,13 @@ package com.assignx.AssignxServer.domain.room.dto;
 
 import com.assignx.AssignxServer.domain.building.entity.Building;
 import com.assignx.AssignxServer.domain.room.entity.Room;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record AdminRoomCreateReqDTO(
-        @NotBlank
-        String roomNumber,
+public record RoomReqDTO(
         @NotNull
+        RoomActionType actionType,
+        Long roomId,
+        String roomNumber,
         int roomCapacity
 ) {
     public Room toEntity(Building building) {

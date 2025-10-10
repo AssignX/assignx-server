@@ -69,14 +69,17 @@
     "buildingName": "IT대학4호관(제2학생회관)",
     "rooms": [
       {
+        "actionType": "CREATE",
         "roomNumber": "104",
         "roomCapacity": 66
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "108",
         "roomCapacity": 37
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "106",
         "roomCapacity": 48
       }
@@ -87,66 +90,82 @@
     "buildingName": "IT대학5호관(IT융복합관)",
     "rooms": [
       {
+        "actionType": "CREATE",
         "roomNumber": "B101",
         "roomCapacity": 140
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "B102",
         "roomCapacity": 140
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "224",
         "roomCapacity": 62
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "225",
         "roomCapacity": 62
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "245",
         "roomCapacity": 75
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "248",
         "roomCapacity": 75
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "251",
         "roomCapacity": 75
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "342",
         "roomCapacity": 70
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "345",
         "roomCapacity": 70
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "348",
         "roomCapacity": 70
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "351",
         "roomCapacity": 70
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "355",
         "roomCapacity": 63
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "301",
         "roomCapacity": 40
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "309",
         "roomCapacity": 40
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "324",
         "roomCapacity": 64
       },
       {
+        "actionType": "CREATE",
         "roomNumber": "407",
         "roomCapacity": 36
       }

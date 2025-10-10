@@ -1,6 +1,7 @@
 package com.assignx.AssignxServer.domain.building.dto;
 
-import com.assignx.AssignxServer.domain.room.dto.AdminRoomReqDTO;
+import com.assignx.AssignxServer.domain.room.dto.RoomReqDTO;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -13,6 +14,7 @@ public record BuildingReqDTO(
         @NotBlank
         String buildingName,
         @NotNull
-        List<AdminRoomReqDTO> rooms
+        @Valid
+        List<RoomReqDTO> rooms
 ) {
 }
