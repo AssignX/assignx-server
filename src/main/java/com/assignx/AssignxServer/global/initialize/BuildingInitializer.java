@@ -28,6 +28,7 @@ public class BuildingInitializer implements CommandLineRunner {
         });
 
         List<Building> buildingsToSave = new ArrayList<>();
+
         for (BuildingCreateReqDTO dto : dtos) {
             buildingService.addBuilding(dto);
         }

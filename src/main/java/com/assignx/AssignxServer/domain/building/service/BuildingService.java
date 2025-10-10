@@ -9,6 +9,7 @@ import com.assignx.AssignxServer.domain.building.exception.BuildingExceptionUtil
 import com.assignx.AssignxServer.domain.building.repository.BuildingRepository;
 import com.assignx.AssignxServer.domain.room.dto.RoomResDTO;
 import com.assignx.AssignxServer.domain.room.service.RoomService;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,11 @@ public class BuildingService {
         Building savedBuilding = buildingRepository.save(building);
 
         // 강의실 생성
-        List<RoomResDTO> savedRoomList = roomService.addRoom(savedBuilding, dto.rooms());
+        List<RoomResDTO> savedRoomList = new ArrayList<>();
+        if (dto.rooms() != null && !dto.rooms().isEmpty()) {
+            System.out.println(dto.rooms());
+            savedRoomList = roomService.syncRooms(savedBuilding, dto.rooms());
+        }
 
         return BuildingResDTO.fromEntity(savedBuilding, savedRoomList);
     }
@@ -101,7 +106,7 @@ public class BuildingService {
         building.update(dto);
 
         // 강의실 수정
-        List<RoomResDTO> updatedRooms = roomService.updateRoom(dto.rooms());
+        List<RoomResDTO> updatedRooms = roomService.syncRooms(building, dto.rooms());
 
         return BuildingResDTO.fromEntity(building, updatedRooms);
     }
