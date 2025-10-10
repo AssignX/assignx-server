@@ -7,10 +7,8 @@ import com.assignx.AssignxServer.domain.building.dto.BuildingResDTO;
 import com.assignx.AssignxServer.domain.building.entity.Building;
 import com.assignx.AssignxServer.domain.building.exception.BuildingExceptionUtils;
 import com.assignx.AssignxServer.domain.building.repository.BuildingRepository;
-import com.assignx.AssignxServer.domain.department.repository.DepartmentRepository;
 import com.assignx.AssignxServer.domain.room.dto.RoomResDTO;
 import com.assignx.AssignxServer.domain.room.service.RoomService;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,12 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class BuildingService {
 
     private final BuildingRepository buildingRepository;
-    private final DepartmentRepository departmentRepository;
 
     private final RoomService roomService;
 
     /**
-     * 새로운 건물을 추가합니다. ADMIN 권한으로 호출됩니다.
+     * 새로운 건물을 추가합니다.
      *
      * @param dto 건물 생성에 필요한 데이터를 담고 있는 {@link BuildingCreateReqDTO} 객체.
      * @return 성공적으로 저장된 {@link BuildingResDTO} 객체.
@@ -51,12 +48,12 @@ public class BuildingService {
     }
 
     /**
-     * 모든 건물을 조회합니다. ADMIN 권한으로 호출됩니다.
+     * 모든 건물을 조회합니다.
      *
      * @return 조회된 모든 {@link BuildingListResDTO} 객체 리스트.
      */
     public List<BuildingListResDTO> searchBuilding(String name, Integer number) {
-        List<Building> buildings = new ArrayList<>();
+        List<Building> buildings;
 
         // 이름으로 조회한 경우
         if (name != null && !name.isBlank()) {
@@ -65,23 +62,15 @@ public class BuildingService {
         // 번호로 조회한 경우
         else if (number != null) {
             buildings = buildingRepository.findByBuildingNumber(number);
+        } else {
+            buildings = buildingRepository.findAll();
         }
 
         return buildings.stream().map(BuildingListResDTO::fromEntity).toList();
     }
 
     /**
-     * 모든 건물을 조회합니다. ADMIN 권한으로 호출됩니다.
-     *
-     * @return 조회된 모든 {@link BuildingListResDTO} 객체 리스트.
-     */
-    public List<BuildingListResDTO> getAllBuilding() {
-        List<Building> buildingList = buildingRepository.findAll();
-        return buildingList.stream().map(BuildingListResDTO::fromEntity).toList();
-    }
-
-    /**
-     * 특정 ID를 가진 건물을 조회합니다. ADMIN 권한으로 호출됩니다.
+     * 특정 ID를 가진 건물을 조회합니다.
      *
      * @param buildingId 조회할 건물의 고유 ID.
      * @return 조회된 {@link BuildingResDTO} 객체.
@@ -97,7 +86,7 @@ public class BuildingService {
     }
 
     /**
-     * 건물의 정보를 업데이트합니다. ADMIN 권한으로 호출됩니다.
+     * 건물의 정보를 업데이트합니다.
      *
      * @param dto 업데이트할 정보를 담고 있는 {@link BuildingReqDTO} 객체.
      * @return 업데이트된 {@link BuildingResDTO} 객체.
@@ -118,7 +107,7 @@ public class BuildingService {
     }
 
     /**
-     * 특정 ID를 가진 건물을 삭제합니다. ADMIN 권한으로 호출됩니다.
+     * 특정 ID를 가진 건물을 삭제합니다.
      *
      * @param buildingId 삭제할 건물의 고유 ID.
      */

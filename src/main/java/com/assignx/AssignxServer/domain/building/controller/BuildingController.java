@@ -48,7 +48,7 @@ public class BuildingController {
     @GetMapping()
     @Operation(summary = "건물 목록 조회", description = "건물 목록을 조회합니다.")
     public ResponseEntity<List<BuildingListResDTO>> getAllBuilding() {
-        List<BuildingListResDTO> res = buildingService.getAllBuilding();
+        List<BuildingListResDTO> res = buildingService.searchBuilding(null, null);
         return ResponseEntity.ok(res);
     }
 
