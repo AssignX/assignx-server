@@ -5,7 +5,7 @@ import com.assignx.AssignxServer.domain.room.entity.Room;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record AdminRoomCreateReqDTO(
+public record RoomCreateReqDTO(
         @NotBlank
         String roomNumber,
         @NotNull

@@ -8,7 +8,7 @@ import com.assignx.AssignxServer.domain.building.entity.Building;
 import com.assignx.AssignxServer.domain.building.exception.BuildingExceptionUtils;
 import com.assignx.AssignxServer.domain.building.repository.BuildingRepository;
 import com.assignx.AssignxServer.domain.department.repository.DepartmentRepository;
-import com.assignx.AssignxServer.domain.room.dto.AdminRoomResDTO;
+import com.assignx.AssignxServer.domain.room.dto.RoomResDTO;
 import com.assignx.AssignxServer.domain.room.service.RoomService;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class BuildingService {
         Building savedBuilding = buildingRepository.save(building);
 
         // 강의실 생성
-        List<AdminRoomResDTO> savedRoomList = roomService.addRoomByAdmin(savedBuilding, dto.rooms());
+        List<RoomResDTO> savedRoomList = roomService.addRoom(savedBuilding, dto.rooms());
 
         return BuildingResDTO.fromEntity(savedBuilding, savedRoomList);
     }
@@ -92,8 +92,8 @@ public class BuildingService {
                 .orElseThrow(BuildingExceptionUtils::BuildingNotExist);
 
         // 건물에 존재하는 강의실 조회
-        List<AdminRoomResDTO> adminRoomResDTOS = roomService.getRoomsByBuilding(building);
-        return BuildingResDTO.fromEntity(building, adminRoomResDTOS);
+        List<RoomResDTO> roomResDTOS = roomService.getRoomsByBuilding(building);
+        return BuildingResDTO.fromEntity(building, roomResDTOS);
     }
 
     /**
@@ -112,7 +112,7 @@ public class BuildingService {
         building.update(dto);
 
         // 강의실 수정
-        List<AdminRoomResDTO> updatedRooms = roomService.updateRoom(dto.rooms());
+        List<RoomResDTO> updatedRooms = roomService.updateRoom(dto.rooms());
 
         return BuildingResDTO.fromEntity(building, updatedRooms);
     }

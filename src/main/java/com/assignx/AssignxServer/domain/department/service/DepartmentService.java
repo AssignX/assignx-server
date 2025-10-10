@@ -8,7 +8,7 @@ import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.domain.department.exception.DepartmentExceptionUtils;
 import com.assignx.AssignxServer.domain.department.repository.DepartmentRepository;
 import com.assignx.AssignxServer.domain.member.dto.MemberResDTO;
-import com.assignx.AssignxServer.domain.room.dto.AdminRoomResDTO;
+import com.assignx.AssignxServer.domain.room.dto.RoomResDTO;
 import com.assignx.AssignxServer.domain.room.service.RoomService;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class DepartmentService {
         List<MemberResDTO> updatedEmployees = new ArrayList<>();
 
         // 강의실 목록 저장
-        List<AdminRoomResDTO> updatedRooms = roomService.updateDepartment(dto.roomIds(), department);
+        List<RoomResDTO> updatedRooms = roomService.updateDepartment(dto.roomIds(), department);
 
         return DepartmentResDTO.fromEntity(savedDepartment, updatedEmployees, updatedRooms);
     }
@@ -77,7 +77,7 @@ public class DepartmentService {
         List<MemberResDTO> employees = new ArrayList<>();
 
         // 학과에서 관리하는 강의실 목록 조회
-        List<AdminRoomResDTO> rooms = roomService.getRoomsByDepartment(department);
+        List<RoomResDTO> rooms = roomService.getRoomsByDepartment(department);
 
         return DepartmentResDTO.fromEntity(department, employees, rooms);
     }
@@ -95,7 +95,7 @@ public class DepartmentService {
         List<MemberResDTO> employees = new ArrayList<>();
 
         // 강의실 수정
-        List<AdminRoomResDTO> updatedRooms = roomService.updateDepartment(dto.roomIds(), department);
+        List<RoomResDTO> updatedRooms = roomService.updateDepartment(dto.roomIds(), department);
 
         return DepartmentResDTO.fromEntity(department, employees, updatedRooms);
     }

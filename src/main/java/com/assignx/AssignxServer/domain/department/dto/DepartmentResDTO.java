@@ -2,7 +2,7 @@ package com.assignx.AssignxServer.domain.department.dto;
 
 import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.domain.member.dto.MemberResDTO;
-import com.assignx.AssignxServer.domain.room.dto.AdminRoomResDTO;
+import com.assignx.AssignxServer.domain.room.dto.RoomResDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -19,10 +19,10 @@ public record DepartmentResDTO(
         @NotNull
         List<MemberResDTO> employees,
         @NotNull
-        List<AdminRoomResDTO> rooms
+        List<RoomResDTO> rooms
 ) {
     public static DepartmentResDTO fromEntity(Department department, List<MemberResDTO> employees,
-                                              List<AdminRoomResDTO> rooms) {
+                                              List<RoomResDTO> rooms) {
         return DepartmentResDTO.builder()
                 .departmentId(department.getId())
                 .college(department.getCollege())

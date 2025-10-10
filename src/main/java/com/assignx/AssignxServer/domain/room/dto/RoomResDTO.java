@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record AdminRoomResDTO(
+public record RoomResDTO(
         @NotNull
         Long roomId,
         @NotBlank
@@ -15,8 +15,8 @@ public record AdminRoomResDTO(
         int roomCapacity
 
 ) {
-    public static AdminRoomResDTO fromEntity(Room room) {
-        return AdminRoomResDTO.builder()
+    public static RoomResDTO fromEntity(Room room) {
+        return RoomResDTO.builder()
                 .roomId(room.getId())
                 .roomNumber(room.getRoomNumber())
                 .roomCapacity(room.getRoomCapacity())
