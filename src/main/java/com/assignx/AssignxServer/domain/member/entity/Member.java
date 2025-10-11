@@ -1,5 +1,6 @@
 package com.assignx.AssignxServer.domain.member.entity;
 
+import com.assignx.AssignxServer.domain.courseProfessor.entity.CourseProfessor;
 import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -10,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +43,9 @@ public class Member extends BaseTimeEntity {
     @JoinColumn(name = "department_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Department department;
+
+    @OneToMany(mappedBy = "professor")
+    private List<CourseProfessor> professors;
 
     @Builder
     public Member(Long id, String name, Role role, String idNumber) {

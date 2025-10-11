@@ -1,5 +1,6 @@
 package com.assignx.AssignxServer.domain.course.entity;
 
+import com.assignx.AssignxServer.domain.courseProfessor.entity.CourseProfessor;
 import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.domain.room.entity.Room;
 import jakarta.persistence.Column;
@@ -10,7 +11,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,11 +46,27 @@ public class Course {
     @Column
     private String professorName;
 
+    @OneToMany(mappedBy = "course")
+    private List<CourseProfessor> professors;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Department department;
+
+    @Builder
+    public Course(String courseName, String courseCode, String courseTime, int enrolledCount, String semester,
+                  String professorName, Room room, Department department) {
+        this.courseName = courseName;
+        this.courseCode = courseCode;
+        this.courseTime = courseTime;
+        this.enrolledCount = enrolledCount;
+        this.semester = semester;
+        this.professorName = professorName;
+        this.room = room;
+        this.department = department;
+    }
 
 }
