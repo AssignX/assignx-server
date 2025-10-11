@@ -26,7 +26,7 @@ public class DepartmentService {
     private final RoomService roomService;
 
     /**
-     * 새로운 학과를 추가합니다. ADMIN 권한으로 호출됩니다.
+     * 새로운 학과를 추가합니다.
      *
      * @param dto 학과 생성에 필요한 데이터를 담고 있는 {@link DepartmentCreateReqDTO} 객체.
      * @return 성공적으로 저장된 {@link DepartmentResDTO} 객체.
@@ -53,7 +53,7 @@ public class DepartmentService {
     }
 
     /**
-     * 모든 학과를 조회합니다. ADMIN 권한으로 호출됩니다.
+     * 모든 학과를 조회합니다.
      *
      * @return 조회된 모든 {@link DepartmentListResDTO} 객체 리스트.
      */
@@ -63,7 +63,7 @@ public class DepartmentService {
     }
 
     /**
-     * 특정 ID를 가진 학과를 조회합니다. ADMIN 권한으로 호출됩니다.
+     * 특정 ID를 가진 학과를 조회합니다.
      *
      * @param departmentId 조회할 학과의 고유 ID.
      * @return 조회된 {@link DepartmentResDTO} 객체.
