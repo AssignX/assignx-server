@@ -1,0 +1,25 @@
+### GET 교수 목록 조회
+GET {{host}}/api/member/search/professor?name=정창수
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.length > 0, "There is no data retrieved");
+    })
+
+%}
+
+### GET 직원 목록 조회
+GET {{host}}/api/member/search/employee?departmentId=1
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.length > 0, "There is no data retrieved");
+    })
+
+%}
