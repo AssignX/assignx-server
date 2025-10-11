@@ -1,0 +1,16 @@
+package com.assignx.AssignxServer.domain.course.exception;
+
+import org.springframework.http.HttpStatus;
+
+public class CourseExceptionUtils {
+
+    public static CourseException SemesterParsingFailed() {
+        return new CourseException(HttpStatus.INTERNAL_SERVER_ERROR, "SY에서 불러온 과목에서 학기 정보를 찾을 수 없습니다.");
+    }
+
+    public static CourseException UnknownSemester(String input) {
+        String message = "알 수 없는 학기 정보입니다. (입력값: " + input + ")";
+        return new CourseException(HttpStatus.INTERNAL_SERVER_ERROR, message);
+    }
+
+}
