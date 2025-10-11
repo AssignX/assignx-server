@@ -2,6 +2,7 @@ package com.assignx.AssignxServer.domain.course.service;
 
 import com.assignx.AssignxServer.domain.building.service.BuildingService;
 import com.assignx.AssignxServer.domain.course.dto.CourseCreateReqDTO;
+import com.assignx.AssignxServer.domain.course.dto.CourseResDTO;
 import com.assignx.AssignxServer.domain.course.entity.Course;
 import com.assignx.AssignxServer.domain.course.exception.CourseExceptionUtils;
 import com.assignx.AssignxServer.domain.course.repository.CourseRepository;
@@ -36,6 +37,13 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final CourseProfessorRepository courseProfessorRepository;
 
+    /**
+     * SY에서 강좌 목록을 조회하여 저장합니다.
+     *
+     * @param searchYear           조회할 개설연도
+     * @param searchSemester       조회할 개설학기
+     * @param searchDepartmentCode 조회할 학과코드
+     */
     public void getCourseListFromSY(String searchYear, String searchSemester, String searchDepartmentCode) {
         Map<String, Object> searchBody = new HashMap<>();
         searchBody.put("estblYear", searchYear);
@@ -73,7 +81,6 @@ public class CourseService {
             String courseCode = course.get("crseNo").toString();
             String courseTime = course.get("lssnsTimeInfo").toString();
             int enrolledCount = (int) course.get("appcrCnt");  // 수강 정원: attlcPrscpCnt, 수강 신청 인원: appcrCnt
-            String semester = getSemesterFromSYResponse(course.get("estblYear"), course.get("estblSmstrSctcd"));
             String professorName = course.get("totalPrfssNm").toString();  // "정창수" or  "하이랜드,크리스"
             List<Member> professors = memberService.getProfessorsFromSYResponse(course.get("totalPrfssNm"));
             Room room = buildingService.getBuildingFromSYResponse(course.get("lctrmInfo"), course.get("rmnmCd"));
@@ -89,7 +96,8 @@ public class CourseService {
                     .courseCode(courseCode)
                     .courseTime(courseTime)
                     .enrolledCount(enrolledCount)
-                    .semester(semester)
+                    .year(searchYear)
+                    .semester(searchSemester)
                     .professorName(professorName)
                     .professors(professors)
                     .room(room)
@@ -121,14 +129,41 @@ public class CourseService {
         }
     }
 
-    private String getSemesterFromSYResponse(Object estblYear, Object estblSmstrSctcd) {
-        if (estblSmstrSctcd.toString().equals("CMBS001400001")) {
-            return estblYear + "-1";
-        } else if (estblSmstrSctcd.toString().equals("CMBS001400002")) {
-            return estblYear + "-2";
-        }
-        // TODO 계절학기도 추가
-        throw CourseExceptionUtils.SemesterParsingFailed();
+    /**
+     * 개설연도, 개설학기, 강의실 번호를 기준으로 과목 목록을 조회합니다.
+     *
+     * @param year       조회할 개설연도
+     * @param semester   조회할 개설학기
+     * @param roomNumber 조회할 강의실 번호
+     * @return 조회된 모든 {@link CourseResDTO} 객체 리스트.
+     */
+    public List<CourseResDTO> getCourseByYearAndSemesterAndRoomNumber(String year, String semester, String roomNumber) {
+        List<Course> courses = courseRepository.findByYearAndSemesterAndRoom_RoomNumber(year, semester, roomNumber);
+        return courses.stream().map(CourseResDTO::fromEntity).toList();
+    }
+
+    /**
+     * 개설학과, 교수명을 기준으로 과목 목록을 조회합니다.
+     *
+     * @param major         조회할 학과명
+     * @param professorName 조회할 교수명
+     * @return 조회된 모든 {@link CourseResDTO} 객체 리스트.
+     */
+    public List<CourseResDTO> getCourseByDepartmentAndProfessorName(String major, String professorName) {
+        List<Course> courses = courseRepository.findCoursesByMajorAndProfessorName(major, professorName);
+        return courses.stream().map(CourseResDTO::fromEntity).toList();
+    }
+
+    /**
+     * 개설학과, 교수 ID를 기준으로 과목 목록을 조회합니다.
+     *
+     * @param major       조회할 학과명
+     * @param professorId 조회할 교수 ID
+     * @return 조회된 모든 {@link CourseResDTO} 객체 리스트.
+     */
+    public List<CourseResDTO> getCourseByDepartmentAndProfessorId(String major, Long professorId) {
+        List<Course> courses = courseRepository.findCoursesByMajorAndProfessorId(major, professorId);
+        return courses.stream().map(CourseResDTO::fromEntity).toList();
     }
 
 

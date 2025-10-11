@@ -41,6 +41,9 @@ public class Course {
     private int enrolledCount;
 
     @Column(nullable = false)
+    private String year;
+
+    @Column(nullable = false)
     private String semester;
 
     @Column
@@ -57,12 +60,14 @@ public class Course {
     private Department department;
 
     @Builder
-    public Course(String courseName, String courseCode, String courseTime, int enrolledCount, String semester,
+    public Course(String courseName, String courseCode, String courseTime, int enrolledCount, String year,
+                  String semester,
                   String professorName, Room room, Department department) {
         this.courseName = courseName;
         this.courseCode = courseCode;
         this.courseTime = courseTime;
         this.enrolledCount = enrolledCount;
+        this.year = year;
         this.semester = semester;
         this.professorName = professorName;
         this.room = room;

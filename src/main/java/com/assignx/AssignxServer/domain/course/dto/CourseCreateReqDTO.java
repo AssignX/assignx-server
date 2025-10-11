@@ -20,6 +20,8 @@ public record CourseCreateReqDTO(
         @NotNull
         int enrolledCount,
         @NotBlank
+        String year,
+        @NotBlank
         String semester,
         String professorName,
         List<Member> professors,
@@ -34,6 +36,7 @@ public record CourseCreateReqDTO(
                 .courseName(courseName)
                 .courseTime(courseTime)
                 .enrolledCount(enrolledCount)
+                .year(year)
                 .semester(semester)
                 .professorName(professorName)
                 .room(room)
