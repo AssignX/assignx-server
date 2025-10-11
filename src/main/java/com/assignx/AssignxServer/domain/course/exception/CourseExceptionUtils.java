@@ -13,4 +13,8 @@ public class CourseExceptionUtils {
         return new CourseException(HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
 
+    public static CourseException CourseAlreadyExists() {
+        throw new CourseException(HttpStatus.CONFLICT, "이미 존재하는 강의입니다.");
+    }
+
 }

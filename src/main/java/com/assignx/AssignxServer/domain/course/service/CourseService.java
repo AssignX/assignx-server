@@ -15,6 +15,7 @@ import com.assignx.AssignxServer.domain.room.entity.Room;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -94,6 +95,16 @@ public class CourseService {
                     .room(room)
                     .department(department)
                     .build();
+
+            // Course 중복 검사
+            Optional<Course> existingCourse = courseRepository.findByCourseCodeAndSemester(dto.courseCode(),
+                    dto.semester());
+
+            if (existingCourse.isPresent()) {
+                // FIXME 우선은 중복되는게 있다면 그냥 스킵함
+//                throw CourseExceptionUtils.CourseAlreadyExists();
+                continue;
+            }
 
             // Course 객체 저장
             Course savedCourse = courseRepository.save(dto.toEntity());
