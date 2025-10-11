@@ -57,4 +57,26 @@ public class MemberService {
         List<Member> members = memberRepository.findByRoleAndName(Role.PROFESSOR, name);
         return members.stream().map(MemberResDTO::fromEntity).toList();
     }
+
+    /**
+     * SY에서 조회한 교수명을 실제 교수 객체와 매핑합니다.
+     *
+     * @param totalPrfssNm 조회할 교수 이름 문자열.
+     * @return 조회된 모든 {@link Member} 객체 리스트.
+     */
+    public List<Member> getProfessorsFromSYResponse(Object totalPrfssNm) {
+        String[] nameList = totalPrfssNm.toString().split(",");
+        List<Member> professors = new ArrayList<>();
+        for (String name : nameList) {
+            List<Member> searchRes = memberRepository.findByRoleAndName(Role.PROFESSOR, name);
+            // 검색된 교수가 한 명 뿐이어야 바로 매핑 가능
+            if (searchRes.size() == 1) {
+                professors.add(searchRes.get(0));
+            } else {
+                return null;
+            }
+        }
+        return professors;
+    }
+
 }

@@ -13,4 +13,6 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
     List<Building> findByBuildingName(String buildingName);
 
     List<Building> findByBuildingNumber(int buildingNumber);
+
+    List<Building> findByBuildingNameContaining(String buildingName);
 }
