@@ -54,7 +54,7 @@ public class MemberService {
      */
     public List<MemberResDTO> getAllProfessorsByName(String name) {
         // Role, name으로 PROFESSOR 목록 조회
-        List<Member> members = memberRepository.findByRoleAndName(Role.EMPLOYEE, name);
+        List<Member> members = memberRepository.findByRoleAndName(Role.PROFESSOR, name);
         return members.stream().map(MemberResDTO::fromEntity).toList();
     }
 }
