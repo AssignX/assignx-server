@@ -29,6 +29,11 @@ public class RoomExceptionUtils {
     }
 
     public static RoomException RoomNotExist() {
-        return new RoomException(HttpStatus.NOT_FOUND, "건물이 존재하지 않습니다.");
+        return new RoomException(HttpStatus.NOT_FOUND, "강의실이 존재하지 않습니다.");
+    }
+
+    public static RoomException RoomNotExist(String searchingRoomNumber) {
+        String message = "강의실이 존재하지 않습니다. (찾는 강의실:  " + searchingRoomNumber + ")";
+        return new RoomException(HttpStatus.NOT_FOUND, message);
     }
 }

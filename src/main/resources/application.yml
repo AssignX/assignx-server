@@ -34,5 +34,13 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
+errorping:
+  channelId: ${ERRORPING_CHANNEL_ID}
+  apiKey: ${ERRORPING_API_KEY}
+  startupShutdownNotification:
+    enabled: ${ERRORPING_STARTUP_SHUTDOWN_NOTIFICATION}
+    startup-message: "AssignX 서버가 실행되었습니다."
+    shutdown-message: "AssignX 서버가 종료되었습니다."
+
 server:
   port: ${SPRING_PORT}

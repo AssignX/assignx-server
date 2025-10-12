@@ -13,6 +13,7 @@ import com.assignx.AssignxServer.domain.room.service.RoomService;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,4 +108,21 @@ public class DepartmentService {
 
         departmentRepository.delete(department);
     }
+
+    /**
+     * SY에서 조회한 학과명과 실제 학과 객체와 매핑합니다.
+     *
+     * @param estblDprtnNm 조회할 학과 문자열.
+     * @return 조회된 학과 객체 {@link Department}
+     */
+    public Department getDepartmentFromSYResponse(Object estblDprtnNm) {
+        List<Department> searchedDepartments = departmentRepository.findByMajorContaining(estblDprtnNm.toString());
+        if (searchedDepartments.size() != 1) {
+            String searchedDepartmentNames = searchedDepartments.stream().map(Department::getCollege).collect(
+                    Collectors.joining(", "));
+            throw DepartmentExceptionUtils.DepartmentParsingFailed(estblDprtnNm.toString());
+        }
+        return searchedDepartments.get(0);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.assignx.AssignxServer.domain.department.entity;
 
+import com.assignx.AssignxServer.domain.course.entity.Course;
 import com.assignx.AssignxServer.domain.department.dto.DepartmentReqDTO;
 import com.assignx.AssignxServer.domain.member.entity.Member;
 import com.assignx.AssignxServer.domain.room.entity.Room;
@@ -37,6 +38,9 @@ public class Department extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "department")
     private List<Room> rooms;
+
+    @OneToMany(mappedBy = "department")
+    private List<Course> courses;
 
     @Builder
     public Department(String college, String major) {

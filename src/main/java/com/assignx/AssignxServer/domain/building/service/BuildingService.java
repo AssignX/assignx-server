@@ -8,6 +8,7 @@ import com.assignx.AssignxServer.domain.building.entity.Building;
 import com.assignx.AssignxServer.domain.building.exception.BuildingExceptionUtils;
 import com.assignx.AssignxServer.domain.building.repository.BuildingRepository;
 import com.assignx.AssignxServer.domain.room.dto.RoomResDTO;
+import com.assignx.AssignxServer.domain.room.entity.Room;
 import com.assignx.AssignxServer.domain.room.service.RoomService;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,5 +123,38 @@ public class BuildingService {
                 .orElseThrow(BuildingExceptionUtils::BuildingNotExist);
 
         buildingRepository.delete(buildingToDelete);
+    }
+
+    /**
+     * SY에서 조회한 건물명과 강의실을 실제 강의실 객체와 매핑합니다.
+     *
+     * @param lctrmInfo 조회할 건물 문자열 (e.g. "산격동 캠퍼스  IT대학5호관(IT융복합관)")
+     * @param rmnmCd    조회할 강의실 문자열 (e.g. "342")
+     * @return 조회된 강의실 객체 {@link Room}.
+     */
+    public Room getBuildingFromSYResponse(Object lctrmInfo, Object rmnmCd) {
+        String buildingName = lctrmInfo.toString();
+        String roomNumber = rmnmCd.toString();
+
+        String buildingSearchStr = buildingName.split(" ")[buildingName.split(" ").length - 1];
+        List<Building> searchedBuildings = buildingRepository.findByBuildingNameContaining(buildingSearchStr);
+        if (searchedBuildings.size() != 1) {
+            // 검색된 건물이 하나가 아니라면 매핑할 수 없음
+            // FIXME 컴퓨터학부에서 개설되는 수업의 모든 강의실 정보는 제외한 케이스는 예외처리.
+//            throw BuildingExceptionUtils.BuildingParsingFailed(buildingName);
+            return null;
+        }
+        Building building = searchedBuildings.get(0);
+
+        for (Room room : building.getRooms()) {
+            if (room.getRoomNumber().equals(roomNumber)) {
+                return room;
+            }
+        }
+
+        // 강의실 객체를 찾지 못한 경우
+        // FIXME 컴퓨터학부에서 개설되는 수업의 모든 강의실 정보는 제외한 케이스는 예외처리.
+//        throw RoomExceptionUtils.RoomNotExist(roomNumber);
+        return null;
     }
 }

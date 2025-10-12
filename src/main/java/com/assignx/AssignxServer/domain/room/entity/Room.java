@@ -1,6 +1,7 @@
 package com.assignx.AssignxServer.domain.room.entity;
 
 import com.assignx.AssignxServer.domain.building.entity.Building;
+import com.assignx.AssignxServer.domain.course.entity.Course;
 import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.domain.room.dto.RoomReqDTO;
 import com.assignx.AssignxServer.global.common.entity.BaseTimeEntity;
@@ -12,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,6 +46,9 @@ public class Room extends BaseTimeEntity {
     @JoinColumn(name = "department_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Department department;
+
+    @OneToMany(mappedBy = "room")
+    private List<Course> courses;
 
     @Builder
     public Room(String roomNumber, int roomCapacity, Building building) {

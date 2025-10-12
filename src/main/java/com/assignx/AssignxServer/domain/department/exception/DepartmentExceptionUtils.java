@@ -11,4 +11,9 @@ public class DepartmentExceptionUtils {
     public static DepartmentException DepartmentNotExist() {
         return new DepartmentException(HttpStatus.NOT_FOUND, "학과가 존재하지 않습니다.");
     }
+
+    public static DepartmentException DepartmentParsingFailed(String departmentName) {
+        String message = "학과를 특정할 수 없습니다. (검색어: " + departmentName + ")";
+        return new DepartmentException(HttpStatus.INTERNAL_SERVER_ERROR, message);
+    }
 }
