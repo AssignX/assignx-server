@@ -1,14 +1,17 @@
 package com.assignx.AssignxServer.domain.course.controller;
 
+import com.assignx.AssignxServer.domain.course.dto.CourseProfessorMapReqDTO;
 import com.assignx.AssignxServer.domain.course.dto.CourseResDTO;
 import com.assignx.AssignxServer.domain.course.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,4 +53,12 @@ public class CourseController {
         List<CourseResDTO> res = courseService.getCourseByDepartmentAndProfessorId(major, professorId);
         return ResponseEntity.ok(res);
     }
+
+    @PostMapping("/map")
+    @Operation(summary = "교수 매핑", description = "특정 과목에 담당 교수를 매핑합니다.")
+    public ResponseEntity<CourseResDTO> mapCourseProfessor(@Valid @RequestBody CourseProfessorMapReqDTO dto) {
+        CourseResDTO res = courseService.mapCourseProfessor(dto);
+        return ResponseEntity.ok(res);
+    }
+
 }

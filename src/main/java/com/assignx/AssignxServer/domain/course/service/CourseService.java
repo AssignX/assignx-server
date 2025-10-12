@@ -2,6 +2,7 @@ package com.assignx.AssignxServer.domain.course.service;
 
 import com.assignx.AssignxServer.domain.building.service.BuildingService;
 import com.assignx.AssignxServer.domain.course.dto.CourseCreateReqDTO;
+import com.assignx.AssignxServer.domain.course.dto.CourseProfessorMapReqDTO;
 import com.assignx.AssignxServer.domain.course.dto.CourseResDTO;
 import com.assignx.AssignxServer.domain.course.entity.Course;
 import com.assignx.AssignxServer.domain.course.exception.CourseExceptionUtils;
@@ -11,6 +12,8 @@ import com.assignx.AssignxServer.domain.courseProfessor.repository.CourseProfess
 import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.domain.department.service.DepartmentService;
 import com.assignx.AssignxServer.domain.member.entity.Member;
+import com.assignx.AssignxServer.domain.member.exception.MemberExceptionUtils;
+import com.assignx.AssignxServer.domain.member.repository.MemberRepository;
 import com.assignx.AssignxServer.domain.member.service.MemberService;
 import com.assignx.AssignxServer.domain.room.entity.Room;
 import java.util.HashMap;
@@ -36,6 +39,7 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final CourseProfessorRepository courseProfessorRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * SY에서 강좌 목록을 조회하여 저장합니다.
@@ -166,5 +170,23 @@ public class CourseService {
         return courses.stream().map(CourseResDTO::fromEntity).toList();
     }
 
+    /**
+     * 특정 강의를 담당하는 교수 정보를 매핑합니다.
+     *
+     * @param dto 매핑할 강의와 교수 정보를 담고 있는 {@link CourseProfessorMapReqDTO} 객체.
+     * @return 매핑된 {@link CourseResDTO} 객체.
+     */
+    public CourseResDTO mapCourseProfessor(CourseProfessorMapReqDTO dto) {
+        Course course = courseRepository.findById(dto.courseId()).orElseThrow(CourseExceptionUtils::CourseNotFound);
+        Member professor = memberRepository.findById(dto.professorId())
+                .orElseThrow(MemberExceptionUtils::ProfessorNotFound);
 
+        CourseProfessor courseProfessor = CourseProfessor.builder()
+                .professor(professor)
+                .course(course)
+                .build();
+
+        courseProfessorRepository.save(courseProfessor);
+        return CourseResDTO.fromEntity(course);
+    }
 }

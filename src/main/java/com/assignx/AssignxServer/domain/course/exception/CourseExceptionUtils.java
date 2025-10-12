@@ -17,4 +17,8 @@ public class CourseExceptionUtils {
         throw new CourseException(HttpStatus.CONFLICT, "이미 존재하는 강의입니다.");
     }
 
+    public static CourseException CourseNotFound() {
+        throw new CourseException(HttpStatus.NOT_FOUND, "강의가 존재하지 않습니다.");
+    }
+
 }
