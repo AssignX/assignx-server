@@ -35,4 +35,11 @@ public class MemberController {
         List<MemberResDTO> res = memberService.getAllProfessorsByName(name);
         return ResponseEntity.ok(res);
     }
+
+    @GetMapping("/professor")
+    @Operation(summary = "특정 학과 소속 교수 목록 조회")
+    public ResponseEntity<List<MemberResDTO>> getAllProfessorsByDepartment(@RequestParam Long departmentId) {
+        List<MemberResDTO> res = memberService.getAllProfessorsByDepartment(departmentId);
+        return ResponseEntity.ok(res);
+    }
 }
