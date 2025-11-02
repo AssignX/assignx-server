@@ -60,7 +60,7 @@ public class BuildingController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping()
+    @GetMapping("/department")
     @Operation(summary = "특정 학과의 건물 목록 조회")
     public ResponseEntity<List<RoomResDTO>> getAllBuildingsByDepartment(
             @RequestParam(required = false) Long departmentId) {
