@@ -76,7 +76,6 @@ public class RoomService {
      */
     @Transactional
     public List<RoomResDTO> syncRooms(Building building, List<RoomReqDTO> roomDtos) {
-
         roomDtos.forEach(dto -> {
             if (dto.actionType() == RoomActionType.CREATE) {
                 if (dto.roomId() != null || dto.roomNumber() == null || dto.roomNumber().isBlank()) {
@@ -98,9 +97,7 @@ public class RoomService {
 
         List<Room> processedRooms = new ArrayList<>();
 
-        // ----------------------------------------------------
         // 2. 삭제 처리 (DELETE)
-        // ----------------------------------------------------
         List<RoomReqDTO> deleteDtos = groupedDtos.getOrDefault(RoomActionType.DELETE, Collections.emptyList());
 
         Set<Long> deletedRoomIds = deleteDtos.stream()
