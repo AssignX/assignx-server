@@ -7,6 +7,9 @@ import com.assignx.AssignxServer.domain.building.dto.BuildingResDTO;
 import com.assignx.AssignxServer.domain.building.entity.Building;
 import com.assignx.AssignxServer.domain.building.exception.BuildingExceptionUtils;
 import com.assignx.AssignxServer.domain.building.repository.BuildingRepository;
+import com.assignx.AssignxServer.domain.department.entity.Department;
+import com.assignx.AssignxServer.domain.department.exception.DepartmentExceptionUtils;
+import com.assignx.AssignxServer.domain.department.repository.DepartmentRepository;
 import com.assignx.AssignxServer.domain.room.dto.RoomResDTO;
 import com.assignx.AssignxServer.domain.room.entity.Room;
 import com.assignx.AssignxServer.domain.room.service.RoomService;
@@ -22,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BuildingService {
 
     private final BuildingRepository buildingRepository;
+    private final DepartmentRepository departmentRepository;
 
     private final RoomService roomService;
 
@@ -54,8 +58,10 @@ public class BuildingService {
     }
 
     /**
-     * 모든 건물을 조회합니다.
+     * 조건에 맞는 건물 목록을 조회합니다.
      *
+     * @param name   조회할 건물 이름
+     * @param number 조회할 건물 번호
      * @return 조회된 모든 {@link BuildingListResDTO} 객체 리스트.
      */
     public List<BuildingListResDTO> searchBuilding(String name, Integer number) {
@@ -68,10 +74,21 @@ public class BuildingService {
         // 번호로 조회한 경우
         else if (number != null) {
             buildings = buildingRepository.findByBuildingNumber(number);
-        } else {
-            buildings = buildingRepository.findAll();
         }
+        // 조건이 없는 경우 빈 리스트 반환
+        else {
+            buildings = new ArrayList<>();
+        }
+        return buildings.stream().map(BuildingListResDTO::fromEntity).toList();
+    }
 
+    /**
+     * 모든 건물을 조회합니다.
+     *
+     * @return 조회된 모든 {@link BuildingListResDTO} 객체 리스트.
+     */
+    public List<BuildingListResDTO> getAllBuildings() {
+        List<Building> buildings = buildingRepository.findAll();
         return buildings.stream().map(BuildingListResDTO::fromEntity).toList();
     }
 
@@ -81,7 +98,7 @@ public class BuildingService {
      * @param buildingId 조회할 건물의 고유 ID.
      * @return 조회된 {@link BuildingResDTO} 객체.
      */
-    public BuildingResDTO getBuilding(Long buildingId) {
+    public BuildingResDTO getBuildingById(Long buildingId) {
         // 건물 조회
         Building building = buildingRepository.findById(buildingId)
                 .orElseThrow(BuildingExceptionUtils::BuildingNotExist);
@@ -89,6 +106,18 @@ public class BuildingService {
         // 건물에 존재하는 강의실 조회
         List<RoomResDTO> roomResDTOS = roomService.getRoomsByBuilding(building);
         return BuildingResDTO.fromEntity(building, roomResDTOS);
+    }
+
+    /**
+     * 특정 학과 소속의 건물 목록을 조회합니다.
+     *
+     * @param departmentId 조회할 학과의 고유 ID.
+     * @return 조회된 모든 {@link RoomResDTO} 객체 리스트.
+     */
+    public List<RoomResDTO> getAllBuildingsByDepartment(Long departmentId) {
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(DepartmentExceptionUtils::DepartmentNotExist);
+        return roomService.getRoomsByDepartment(department);
     }
 
     /**

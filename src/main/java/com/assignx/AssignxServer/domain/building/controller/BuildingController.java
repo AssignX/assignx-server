@@ -5,6 +5,7 @@ import com.assignx.AssignxServer.domain.building.dto.BuildingListResDTO;
 import com.assignx.AssignxServer.domain.building.dto.BuildingReqDTO;
 import com.assignx.AssignxServer.domain.building.dto.BuildingResDTO;
 import com.assignx.AssignxServer.domain.building.service.BuildingService;
+import com.assignx.AssignxServer.domain.room.dto.RoomResDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -47,15 +48,23 @@ public class BuildingController {
 
     @GetMapping()
     @Operation(summary = "건물 목록 조회", description = "건물 목록을 조회합니다.")
-    public ResponseEntity<List<BuildingListResDTO>> getAllBuilding() {
-        List<BuildingListResDTO> res = buildingService.searchBuilding(null, null);
+    public ResponseEntity<List<BuildingListResDTO>> getAllBuildings() {
+        List<BuildingListResDTO> res = buildingService.getAllBuildings();
         return ResponseEntity.ok(res);
     }
 
     @GetMapping("/{buildingId}")
     @Operation(summary = "건물 상세 조회", description = "특정 건물에 대한 정보를 조회합니다.")
-    public ResponseEntity<BuildingResDTO> getBuilding(@PathVariable("buildingId") Long buildingId) {
-        BuildingResDTO res = buildingService.getBuilding(buildingId);
+    public ResponseEntity<BuildingResDTO> getBuildingById(@PathVariable("buildingId") Long buildingId) {
+        BuildingResDTO res = buildingService.getBuildingById(buildingId);
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping()
+    @Operation(summary = "특정 학과의 건물 목록 조회")
+    public ResponseEntity<List<RoomResDTO>> getAllBuildingsByDepartment(
+            @RequestParam(required = false) Long departmentId) {
+        List<RoomResDTO> res = buildingService.getAllBuildingsByDepartment(departmentId);
         return ResponseEntity.ok(res);
     }
 
