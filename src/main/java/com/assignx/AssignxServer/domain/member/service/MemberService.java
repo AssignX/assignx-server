@@ -79,4 +79,18 @@ public class MemberService {
         return professors;
     }
 
+    /**
+     * 학과 ID로 교수를 조회합니다.
+     *
+     * @param departmentId 조회할 학과의 고유 ID.
+     * @return 조회된 모든 {@link MemberResDTO} 객체 리스트.
+     */
+    public List<MemberResDTO> getAllProfessorsByDepartment(Long departmentId) {
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(DepartmentExceptionUtils::DepartmentNotExist);
+
+        List<Member> members = memberRepository.findByRoleAndDepartment(Role.PROFESSOR, department);
+        return members.stream().map(MemberResDTO::fromEntity).toList();
+    }
+
 }
