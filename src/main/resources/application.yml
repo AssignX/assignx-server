@@ -36,7 +36,6 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: INFO
 
 errorping:
-  channelId: ${ERRORPING_CHANNEL_ID}
   apiKey: ${ERRORPING_API_KEY}
   startupShutdownNotification:
     enabled: ${ERRORPING_STARTUP_SHUTDOWN_NOTIFICATION}
