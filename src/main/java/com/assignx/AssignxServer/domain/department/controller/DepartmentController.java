@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,20 +30,23 @@ public class DepartmentController {
 
     private final DepartmentService departmentService;
 
-    @PostMapping()
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
     @Operation(summary = "학과 추가", description = "새로운 학과 정보를 추가합니다.")
     public ResponseEntity<DepartmentResDTO> addDepartment(@Valid @RequestBody DepartmentCreateReqDTO dto) {
         DepartmentResDTO res = departmentService.addDepartment(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
     @Operation(summary = "학과 목록 조회", description = "학과 목록을 조회합니다.")
     public ResponseEntity<List<DepartmentListResDTO>> getAllDepartments() {
         List<DepartmentListResDTO> res = departmentService.getAllDepartments();
         return ResponseEntity.ok(res);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{departmentId}")
     @Operation(summary = "학과 상세 조회", description = "특정 학과에 대한 정보를 조회합니다.")
     public ResponseEntity<DepartmentResDTO> getDepartment(
@@ -51,13 +55,15 @@ public class DepartmentController {
         return ResponseEntity.ok(res);
     }
 
-    @PutMapping()
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping
     @Operation(summary = "학과 수정", description = "특정 학과에 대한 정보를 수정합니다.")
     public ResponseEntity<DepartmentResDTO> updateDepartment(@Valid @RequestBody DepartmentReqDTO dto) {
         DepartmentResDTO res = departmentService.updateDepartment(dto);
         return ResponseEntity.ok(res);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{departmentId}")
     @Operation(summary = "학과 삭제", description = "특정 학과에 대한 정보를 삭제합니다.")
     public ResponseEntity<Void> deleteDepartment(@PathVariable("departmentId") Long departmentId) {
