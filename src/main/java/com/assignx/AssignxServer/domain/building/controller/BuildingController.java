@@ -40,7 +40,7 @@ public class BuildingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    @PostMapping("/search")
+    @GetMapping("/search")
     @Operation(summary = "건물 상세 조회", description = "건물 번호와 이름으로 건물을 조회합니다.")
     public ResponseEntity<List<BuildingListResDTO>> searchBuilding(@RequestParam(required = false) String name,
                                                                    @RequestParam(required = false) Integer number) {
