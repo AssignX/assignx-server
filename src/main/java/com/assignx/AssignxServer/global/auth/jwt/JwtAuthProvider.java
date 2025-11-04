@@ -1,5 +1,6 @@
 package com.assignx.AssignxServer.global.auth.jwt;
 
+import com.assignx.AssignxServer.domain.member.entity.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -25,9 +26,10 @@ public class JwtAuthProvider {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(String idNumber) {
+    public String generateAccessToken(String idNumber, Role role) {
         return Jwts.builder()
                 .claim("idNumber", idNumber)
+                .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + accessTokenValidity))
                 .signWith(this.getSigningKey())
@@ -64,5 +66,15 @@ public class JwtAuthProvider {
                 .getPayload();
         return claims.get("idNumber").toString();
     }
+
+    public Role getMemberRole(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return Role.valueOf(claims.get("role").toString());
+    }
+
 
 }

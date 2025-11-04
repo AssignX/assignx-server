@@ -1,11 +1,16 @@
 package com.assignx.AssignxServer.global.auth.jwt;
 
+import com.assignx.AssignxServer.domain.member.entity.Role;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @RequiredArgsConstructor
@@ -20,7 +25,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = resolveToken(request);
 
         if (token != null && jwtAuthProvider.validate(token)) {
-            // 토큰이 유효하면, SecurityContext 설정 생략 (필요 시 UserDetailsService 연동 가능)
+            String idNumber = jwtAuthProvider.getMemberIdNumber(token);
+            Role role = jwtAuthProvider.getMemberRole(token);
+
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(idNumber, null,
+                            List.of(new SimpleGrantedAuthority("ROLE_" + role)));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         chain.doFilter(request, response);
