@@ -7,4 +7,8 @@ public class MemberExceptionUtils {
     public static MemberException ProfessorNotFound() {
         return new MemberException(HttpStatus.NOT_FOUND, "교수가 존재하지 않습니다.");
     }
+
+    public static MemberException MemberNotFound() {
+        return new MemberException(HttpStatus.NOT_FOUND, "사용자가 존재하지 않습니다.");
+    }
 }

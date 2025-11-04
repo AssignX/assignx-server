@@ -13,6 +13,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,14 +32,15 @@ public class BuildingController {
 
     private final BuildingService buildingService;
 
-    @PostMapping("/admin")
-    @Operation(summary = "건물 추가", description = "새로운 건물과 강의실 정보를 추가합니다.")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
+    @Operation(summary = "건물 추가", description = "새로운 건물과 강의실 정보를 추가합니다. (관리자 권한)")
     public ResponseEntity<BuildingResDTO> addBuilding(@Valid @RequestBody BuildingCreateReqDTO dto) {
         BuildingResDTO res = buildingService.addBuilding(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    @PostMapping("/search")
+    @GetMapping("/search")
     @Operation(summary = "건물 상세 조회", description = "건물 번호와 이름으로 건물을 조회합니다.")
     public ResponseEntity<List<BuildingListResDTO>> searchBuilding(@RequestParam(required = false) String name,
                                                                    @RequestParam(required = false) Integer number) {
@@ -46,7 +48,7 @@ public class BuildingController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping()
+    @GetMapping
     @Operation(summary = "건물 목록 조회", description = "건물 목록을 조회합니다.")
     public ResponseEntity<List<BuildingListResDTO>> getAllBuildings() {
         List<BuildingListResDTO> res = buildingService.getAllBuildings();
@@ -60,24 +62,26 @@ public class BuildingController {
         return ResponseEntity.ok(res);
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/department")
-    @Operation(summary = "특정 학과의 건물 목록 조회")
+    @Operation(summary = "특정 학과 건물 목록 조회", description = "특정 학과에 대한 건물 목록을 조회합니다. (직원 권한)")
     public ResponseEntity<List<RoomResDTO>> getAllBuildingsByDepartment(
             @RequestParam(required = false) Long departmentId) {
         List<RoomResDTO> res = buildingService.getAllBuildingsByDepartment(departmentId);
         return ResponseEntity.ok(res);
     }
 
-
-    @PutMapping("/admin")
-    @Operation(summary = "건물 수정", description = "특정 건물에 대한 정보를 수정합니다.")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping
+    @Operation(summary = "건물 수정", description = "특정 건물에 대한 정보를 수정합니다. (관리자 권한)")
     public ResponseEntity<BuildingResDTO> updateBuilding(@Valid @RequestBody BuildingReqDTO dto) {
         BuildingResDTO res = buildingService.updateBuilding(dto);
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/admin/{buildingId}")
-    @Operation(summary = "건물 삭제", description = "특정 건물에 대한 정보를 삭제합니다.")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{buildingId}")
+    @Operation(summary = "건물 삭제", description = "특정 건물에 대한 정보를 삭제합니다. (관리자 권한)")
     public ResponseEntity<Void> deleteBuilding(@PathVariable("buildingId") Long buildingId) {
         buildingService.deleteBuilding(buildingId);
         return ResponseEntity.ok().build();

@@ -49,12 +49,25 @@ public class MemberService {
     /**
      * 이름으로 교수를 검색합니다.
      *
-     * @param name 조회할 교수의 이름.
+     * @param name         조회할 교수의 이름.
+     * @param departmentId 조회할 교수의 학과 ID.
      * @return 조회된 모든 {@link MemberResDTO} 객체 리스트.
      */
-    public List<MemberResDTO> getAllProfessorsByName(String name) {
-        // Role, name으로 PROFESSOR 목록 조회
-        List<Member> members = memberRepository.findByRoleAndName(Role.PROFESSOR, name);
+    public List<MemberResDTO> getAllProfessorsByNameOrDepartment(String name, Long departmentId) {
+        List<Member> members = new ArrayList<>();
+
+        // 이름으로 조회한 경우
+        if (name != null && !name.isBlank()) {
+            members = memberRepository.findByRoleAndName(Role.PROFESSOR, name);
+        }
+        // 소속으로 조회한 경우
+        else if (departmentId != null) {
+            // 학과 존재 확인
+            Department department = departmentRepository.findById(departmentId)
+                    .orElseThrow(DepartmentExceptionUtils::DepartmentNotExist);
+            members = memberRepository.findByRoleAndDepartment(Role.PROFESSOR, department);
+        }
+
         return members.stream().map(MemberResDTO::fromEntity).toList();
     }
 
@@ -77,20 +90,6 @@ public class MemberService {
             }
         }
         return professors;
-    }
-
-    /**
-     * 학과 ID로 교수를 조회합니다.
-     *
-     * @param departmentId 조회할 학과의 고유 ID.
-     * @return 조회된 모든 {@link MemberResDTO} 객체 리스트.
-     */
-    public List<MemberResDTO> getAllProfessorsByDepartment(Long departmentId) {
-        Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(DepartmentExceptionUtils::DepartmentNotExist);
-
-        List<Member> members = memberRepository.findByRoleAndDepartment(Role.PROFESSOR, department);
-        return members.stream().map(MemberResDTO::fromEntity).toList();
     }
 
 }

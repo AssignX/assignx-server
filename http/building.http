@@ -1,6 +1,24 @@
+### POST 관리자 로그인
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "idNumber": "9999999999",
+  "password": "1234"
+}
+
+> {%
+    client.test("Login successful", function () {
+        client.assert(response.status === 200, "Login failed with status " + response.status);
+        client.assert(response.body.accessToken, "No accessToken found in response");
+    });
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
 ### POST 건물 추가
-POST {{host}}/api/building/admin
+POST {{host}}/api/building
 Content-Type:application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "buildingNumber": 999,
@@ -29,8 +47,9 @@ Content-Type:application/json
 %}
 
 ### POST 건물 추가 중복 체크
-POST {{host}}/api/building/admin
+POST {{host}}/api/building
 Content-Type:application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "buildingNumber": 999,
@@ -78,8 +97,8 @@ GET {{host}}/api/building/{{created_building_id}}
     })
 %}
 
-### POST 건물 검색 (이름)
-POST {{host}}/api/building/search?name=테스트 건물
+### GET 건물 검색 (이름)
+GET {{host}}/api/building/search?name=테스트 건물
 
 > {%
     client.test("Response status is 200", function () {
@@ -91,8 +110,8 @@ POST {{host}}/api/building/search?name=테스트 건물
     })
 %}
 
-### POST 건물 검색 (번호)
-POST {{host}}/api/building/search?number=999
+### GET 건물 검색 (번호)
+GET {{host}}/api/building/search?number=999
 
 > {%
     client.test("Response status is 200", function () {
@@ -105,8 +124,9 @@ POST {{host}}/api/building/search?number=999
 %}
 
 ### PUT 건물 수정
-PUT {{host}}/api/building/admin
+PUT {{host}}/api/building
 Content-Type:application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "buildingId": {{created_building_id}},
@@ -135,10 +155,41 @@ Content-Type:application/json
 %}
 
 ### DELETE 건물 삭제
-DELETE {{host}}/api/building/admin/{{created_building_id}}
+DELETE {{host}}/api/building/{{created_building_id}}
+Authorization: Bearer {{auth_token}}
 
 > {%
     client.test("Response status is 200", function () {
         client.assert(response.status === 200, "Response status is not 200");
     });
+%}
+
+### POST 직원 로그인
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "idNumber": "2025200001",
+  "password": "1234"
+}
+
+> {%
+    client.test("Login successful", function () {
+        client.assert(response.status === 200, "Login failed with status " + response.status);
+        client.assert(response.body.accessToken, "No accessToken found in response");
+    });
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+### GET 특정 학과 건물 목록 조회
+GET {{host}}/api/building/department?departmentId=1
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.length > 0, "There is no data retrieved");
+    })
 %}
