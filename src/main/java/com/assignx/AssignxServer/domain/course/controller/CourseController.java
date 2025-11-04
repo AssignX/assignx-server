@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ public class CourseController {
 
     private final CourseService courseService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public void test() {
         courseService.getCourseListFromSY("2025", "2", "1O02");
@@ -54,6 +56,7 @@ public class CourseController {
         return ResponseEntity.ok(res);
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("/map")
     @Operation(summary = "교수 매핑", description = "특정 과목에 담당 교수를 매핑합니다.")
     public ResponseEntity<CourseResDTO> mapCourseProfessor(@Valid @RequestBody CourseProfessorMapReqDTO dto) {
