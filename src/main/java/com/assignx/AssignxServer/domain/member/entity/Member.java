@@ -33,6 +33,9 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
+    //    @Column(nullable = false)
+    private String password;
+
     @Column(nullable = false)
     private Role role;
 

@@ -29,6 +29,11 @@ spring:
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
 
+jwt:
+  secret: ${JWT_SECRET}
+  access-expiration-ms: ${ACCESS_EXP_MS}
+  refresh-expiration-ms: ${REFRESH_EXP_MS}
+
 logging:
   level:
     root: INFO
