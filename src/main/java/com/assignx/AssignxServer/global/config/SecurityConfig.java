@@ -1,5 +1,6 @@
 package com.assignx.AssignxServer.global.config;
 
+import com.assignx.AssignxServer.global.auth.exception.SecurityExceptionHandler;
 import com.assignx.AssignxServer.global.auth.jwt.JwtAuthFilter;
 import com.assignx.AssignxServer.global.auth.jwt.JwtAuthProvider;
 import java.util.List;
@@ -28,6 +29,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtAuthProvider jwtAuthProvider;
+    private final SecurityExceptionHandler securityExceptionHandler;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -39,9 +42,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
-                        .anyRequest().permitAll() // TODO Permit all other requests for now
+                        .anyRequest().permitAll()
                 )
-                .addFilterBefore(new JwtAuthFilter(jwtAuthProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthFilter(jwtAuthProvider, securityExceptionHandler),
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

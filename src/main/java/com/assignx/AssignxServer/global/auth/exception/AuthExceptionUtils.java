@@ -4,6 +4,14 @@ import org.springframework.http.HttpStatus;
 
 public class AuthExceptionUtils {
 
+    public static AuthException AccessTokenInvalid() {
+        return new AuthException(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
+    }
+
+    public static AuthException TokenExpired() {
+        return new AuthException(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
+    }
+
     public static AuthException PasswordNotMatch() {
         return new AuthException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
     }
@@ -15,6 +23,5 @@ public class AuthExceptionUtils {
     public static AuthException InvalidRefreshToken() {
         return new AuthException(HttpStatus.UNAUTHORIZED, "유효하지 않은 리프레시 토큰입니다.");
     }
-
 
 }
