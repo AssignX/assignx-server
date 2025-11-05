@@ -1,7 +1,9 @@
 package com.assignx.AssignxServer.global.auth.jwt;
 
 import com.assignx.AssignxServer.domain.member.entity.Role;
+import com.assignx.AssignxServer.global.auth.exception.AuthExceptionUtils;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -45,36 +47,17 @@ public class JwtAuthProvider {
                 .compact();
     }
 
-    public boolean validate(String token) {
+    public Claims extractClaims(String token) {
         try {
-            Jwts.parser()
+            return Jwts.parser()
                     .verifyWith(getSigningKey())
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-            return true;
+        } catch (ExpiredJwtException e) {
+            throw AuthExceptionUtils.TokenExpired();
         } catch (JwtException | IllegalArgumentException e) {
-            return false;
+            throw AuthExceptionUtils.AccessTokenInvalid();
         }
     }
-
-    public String getMemberIdNumber(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return claims.get("idNumber").toString();
-    }
-
-    public Role getMemberRole(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return Role.valueOf(claims.get("role").toString());
-    }
-
-
 }

@@ -10,6 +10,7 @@ import com.assignx.AssignxServer.global.auth.dto.TokenReissueResDTO;
 import com.assignx.AssignxServer.global.auth.exception.AuthExceptionUtils;
 import com.assignx.AssignxServer.global.auth.jwt.JwtAuthProvider;
 import com.assignx.AssignxServer.global.auth.redis.RedisService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,8 @@ public class AuthService {
     }
 
     public TokenReissueResDTO reissue(TokenReissueReqDTO reqDTO) {
-        String idNumber = jwtAuthProvider.getMemberIdNumber(reqDTO.accessToken());
+        Claims claims = jwtAuthProvider.extractClaims(reqDTO.accessToken());
+        String idNumber = claims.get("idNumber").toString();
         Member member = memberRepository.findByIdNumber(idNumber)
                 .orElseThrow(MemberExceptionUtils::MemberNotFound);
 

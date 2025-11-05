@@ -1,6 +1,9 @@
 package com.assignx.AssignxServer.global.auth.jwt;
 
 import com.assignx.AssignxServer.domain.member.entity.Role;
+import com.assignx.AssignxServer.global.auth.exception.SecurityExceptionHandler;
+import com.jhssong.errorping.exception.BaseDomainException;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,25 +20,34 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtAuthProvider jwtAuthProvider;
+    private final SecurityExceptionHandler securityExceptionHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+        try {
+            String token = resolveToken(request);
 
-        String token = resolveToken(request);
+            if (token == null) {
+                chain.doFilter(request, response);
+                return;
+            }
 
-        if (token != null && jwtAuthProvider.validate(token)) {
-            String idNumber = jwtAuthProvider.getMemberIdNumber(token);
-            Role role = jwtAuthProvider.getMemberRole(token);
+            Claims claims = jwtAuthProvider.extractClaims(token);
+            String idNumber = claims.get("idNumber").toString();
+            Role role = Role.valueOf(claims.get("role").toString());
 
             UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(idNumber, null,
-                            List.of(new SimpleGrantedAuthority("ROLE_" + role)));
+                    new UsernamePasswordAuthenticationToken(
+                            idNumber, null, List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                    );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            chain.doFilter(request, response);
+        } catch (BaseDomainException ex) {
+            SecurityContextHolder.clearContext();
+            securityExceptionHandler.handle(ex, request, response);
         }
-
-        chain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest request) {
