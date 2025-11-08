@@ -1,6 +1,7 @@
 package com.assignx.AssignxServer.global.auth.dto;
 
 import com.assignx.AssignxServer.domain.member.entity.Member;
+import com.assignx.AssignxServer.domain.member.entity.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -11,6 +12,8 @@ public record LoginResDTO(
         Long memberId,
         @NotBlank
         String name,
+        @NotNull
+        Role role,
         @NotBlank
         String idNumber,
         @NotNull
@@ -26,6 +29,7 @@ public record LoginResDTO(
         return LoginResDTO.builder()
                 .memberId(member.getId())
                 .name(member.getName())
+                .role(member.getRole())
                 .idNumber(member.getIdNumber())
                 .departmentId(member.getDepartment().getId())
                 .departmentName(member.getDepartment().getMajor())
