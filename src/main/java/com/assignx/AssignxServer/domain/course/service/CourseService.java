@@ -16,12 +16,17 @@ import com.assignx.AssignxServer.domain.member.exception.MemberExceptionUtils;
 import com.assignx.AssignxServer.domain.member.repository.MemberRepository;
 import com.assignx.AssignxServer.domain.member.service.MemberService;
 import com.assignx.AssignxServer.domain.room.entity.Room;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -134,41 +139,68 @@ public class CourseService {
     }
 
     /**
-     * 개설연도, 개설학기, 강의실 번호를 기준으로 과목 목록을 조회합니다.
+     * 다양한 검색 조건(연도/학기/강의실, 학과/교수명, 학과/교수ID 등)을 기반으로 과목 목록을 조회합니다.
      *
-     * @param year       조회할 개설연도
-     * @param semester   조회할 개설학기
-     * @param roomNumber 조회할 강의실 번호
+     * @param year          (선택) 개설연도
+     * @param semester      (선택) 개설학기
+     * @param roomId        (선택) 강의실 ID
+     * @param departmentId  (선택) 학과 ID
+     * @param professorName (선택) 교수명
+     * @param professorId   (선택) 교수 ID
      * @return 조회된 모든 {@link CourseResDTO} 객체 리스트.
      */
-    public List<CourseResDTO> getCourseByYearAndSemesterAndRoomNumber(String year, String semester, String roomNumber) {
-        List<Course> courses = courseRepository.findByYearAndSemesterAndRoom_RoomNumber(year, semester, roomNumber);
+    public List<CourseResDTO> searchCourse(
+            String year,
+            String semester,
+            Long roomId,
+            Long departmentId,
+            String professorName,
+            Long professorId
+    ) {
+        Specification<Course> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            // 개설연도
+            if (year != null && !year.isBlank()) {
+                predicates.add(cb.equal(root.get("year"), year));
+            }
+
+            // 학기
+            if (semester != null && !semester.isBlank()) {
+                predicates.add(cb.equal(root.get("semester"), semester));
+            }
+
+            // 강의실
+            if (roomId != null) {
+                predicates.add(cb.equal(root.join("room", JoinType.LEFT).get("id"), roomId));
+            }
+
+            // 학과
+            if (departmentId != null) {
+                predicates.add(cb.equal(root.join("department", JoinType.LEFT).get("id"), departmentId));
+            }
+
+            // CourseProfessor → Member 조인
+            Join<Object, Object> courseProfessorsJoin = root.join("professors", JoinType.LEFT);
+            Join<Object, Object> memberJoin = courseProfessorsJoin.join("professor", JoinType.LEFT);
+
+            // 교수명 검색
+            if (professorName != null && !professorName.isBlank()) {
+                predicates.add(cb.like(memberJoin.get("name"), "%" + professorName + "%"));
+            }
+
+            // 교수 ID 검색
+            if (professorId != null) {
+                predicates.add(cb.equal(memberJoin.get("id"), professorId));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        List<Course> courses = courseRepository.findAll(spec);
         return courses.stream().map(CourseResDTO::fromEntity).toList();
     }
 
-    /**
-     * 개설학과, 교수명을 기준으로 과목 목록을 조회합니다.
-     *
-     * @param major         조회할 학과명
-     * @param professorName 조회할 교수명
-     * @return 조회된 모든 {@link CourseResDTO} 객체 리스트.
-     */
-    public List<CourseResDTO> getCourseByDepartmentAndProfessorName(String major, String professorName) {
-        List<Course> courses = courseRepository.findCoursesByMajorAndProfessorName(major, professorName);
-        return courses.stream().map(CourseResDTO::fromEntity).toList();
-    }
-
-    /**
-     * 개설학과, 교수 ID를 기준으로 과목 목록을 조회합니다.
-     *
-     * @param major       조회할 학과명
-     * @param professorId 조회할 교수 ID
-     * @return 조회된 모든 {@link CourseResDTO} 객체 리스트.
-     */
-    public List<CourseResDTO> getCourseByDepartmentAndProfessorId(String major, Long professorId) {
-        List<Course> courses = courseRepository.findCoursesByMajorAndProfessorId(major, professorId);
-        return courses.stream().map(CourseResDTO::fromEntity).toList();
-    }
 
     /**
      * 특정 강의를 담당하는 교수 정보를 매핑합니다.

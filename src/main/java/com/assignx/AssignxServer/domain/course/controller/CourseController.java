@@ -31,29 +31,18 @@ public class CourseController {
         courseService.getCourseListFromSY("2025", "2", "1O02");
     }
 
-    @GetMapping(value = "/search", params = {"year", "semester", "roomNumber"})
-    @Operation(summary = "과목 조회 (시간/장소 기반)", description = "개설연도, 개설학기, 강의실 번호를 기준으로 과목 목록을 조회합니다.")
-    public ResponseEntity<List<CourseResDTO>> getCourseByYearAndSemesterAndRoomNumber(@RequestParam String year,
-                                                                                      @RequestParam String semester,
-                                                                                      @RequestParam String roomNumber) {
-        List<CourseResDTO> res = courseService.getCourseByYearAndSemesterAndRoomNumber(year, semester, roomNumber);
-        return ResponseEntity.ok(res);
-    }
-
-    @GetMapping(value = "/search", params = {"major", "professorName"})
-    @Operation(summary = "과목 조회 (학과/교수 기반)", description = "개설학과, 교수명을 기준으로 과목 목록을 조회합니다.")
-    public ResponseEntity<List<CourseResDTO>> getCourseByDepartmentAndProfessorName(@RequestParam String major,
-                                                                                    @RequestParam String professorName) {
-        List<CourseResDTO> res = courseService.getCourseByDepartmentAndProfessorName(major, professorName);
-        return ResponseEntity.ok(res);
-    }
-
-    @GetMapping(value = "/search", params = {"major", "professorId"})
-    @Operation(summary = "과목 조회 (학과/교수 ID 기반)", description = "개설학과, 교수 ID를 기준으로 과목 목록을 조회합니다.")
-    public ResponseEntity<List<CourseResDTO>> getCourseByDepartmentAndProfessorId(@RequestParam String major,
-                                                                                  @RequestParam Long professorId) {
-        List<CourseResDTO> res = courseService.getCourseByDepartmentAndProfessorId(major, professorId);
-        return ResponseEntity.ok(res);
+    @GetMapping("/search")
+    @Operation(summary = "과목 조회", description = "개설연도, 개설학기, 강의실 번호, 개설학과, 교수명, 교수 ID를 이용해 과목 목록을 조회합니다.")
+    public ResponseEntity<List<CourseResDTO>> searchCourse(
+            @RequestParam(required = false) String year,
+            @RequestParam(required = false) String semester,
+            @RequestParam(required = false) Long roomId,
+            @RequestParam(required = false) Long departmentId,
+            @RequestParam(required = false) String professorName,
+            @RequestParam(required = false) Long professorId
+    ) {
+        return ResponseEntity.ok(
+                courseService.searchCourse(year, semester, roomId, departmentId, professorName, professorId));
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
