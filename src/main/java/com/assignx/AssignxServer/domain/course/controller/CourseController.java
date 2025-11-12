@@ -25,12 +25,6 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public void test() {
-        courseService.getCourseListFromSY("2025", "2", "1O02");
-    }
-
     @GetMapping("/search")
     @Operation(summary = "과목 조회", description = "개설연도, 개설학기, 강의실 번호, 개설학과, 교수명, 교수 ID를 이용해 과목 목록을 조회합니다.")
     public ResponseEntity<List<CourseResDTO>> searchCourse(
