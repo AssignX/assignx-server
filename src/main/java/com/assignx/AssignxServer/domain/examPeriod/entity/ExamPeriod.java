@@ -27,33 +27,60 @@ public class ExamPeriod {
     private String semester;
 
     @Column(nullable = false)
-    private LocalDateTime midStartDateTime;
+    private LocalDateTime midFirstStartDateTime;
 
     @Column(nullable = false)
-    private LocalDateTime midEndDateTime;
+    private LocalDateTime midFirstEndDateTime;
 
     @Column(nullable = false)
-    private LocalDateTime finalStartDateTime;
+    private LocalDateTime midSecondStartDateTime;
 
     @Column(nullable = false)
-    private LocalDateTime finalEndDateTime;
+    private LocalDateTime midSecondEndDateTime;
+
+    @Column(nullable = false)
+    private LocalDateTime finalFirstStartDateTime;
+
+    @Column(nullable = false)
+    private LocalDateTime finalFirstEndDateTime;
+
+    @Column(nullable = false)
+    private LocalDateTime finalSecondStartDateTime;
+
+    @Column(nullable = false)
+    private LocalDateTime finalSecondEndDateTime;
 
     @Builder
-    public ExamPeriod(String year, String semester, LocalDateTime midStartDateTime, LocalDateTime midEndDateTime,
-                      LocalDateTime finalStartDateTime, LocalDateTime finalEndDateTime) {
+    public ExamPeriod(String year, String semester,
+                      LocalDateTime midFirstStartDateTime,
+                      LocalDateTime midFirstEndDateTime,
+                      LocalDateTime midSecondStartDateTime,
+                      LocalDateTime midSecondEndDateTime,
+                      LocalDateTime finalFirstStartDateTime,
+                      LocalDateTime finalFirstEndDateTime,
+                      LocalDateTime finalSecondStartDateTime,
+                      LocalDateTime finalSecondEndDateTime) {
         this.year = year;
         this.semester = semester;
-        this.midStartDateTime = midStartDateTime;
-        this.midEndDateTime = midEndDateTime;
-        this.finalStartDateTime = finalStartDateTime;
-        this.finalEndDateTime = finalEndDateTime;
+        this.midFirstStartDateTime = midFirstStartDateTime;
+        this.midFirstEndDateTime = midFirstEndDateTime;
+        this.midSecondStartDateTime = midSecondStartDateTime;
+        this.midSecondEndDateTime = midSecondEndDateTime;
+        this.finalFirstStartDateTime = finalFirstStartDateTime;
+        this.finalFirstEndDateTime = finalFirstEndDateTime;
+        this.finalSecondStartDateTime = finalSecondStartDateTime;
+        this.finalSecondEndDateTime = finalSecondEndDateTime;
     }
 
     public ExamPeriod update(ExamPeriodReqDTO dto) {
-        this.midStartDateTime = dto.midStartDateTime();
-        this.midEndDateTime = dto.midEndDateTime();
-        this.finalStartDateTime = dto.finalStartDateTime();
-        this.finalEndDateTime = dto.finalEndDateTime();
+        this.midFirstStartDateTime = dto.midFirstStartDateTime();
+        this.midFirstEndDateTime = dto.midFirstEndDateTime();
+        this.midSecondStartDateTime = dto.midSecondStartDateTime();
+        this.midSecondEndDateTime = dto.midSecondEndDateTime();
+        this.finalFirstStartDateTime = dto.finalFirstStartDateTime();
+        this.finalFirstEndDateTime = dto.finalFirstEndDateTime();
+        this.finalSecondStartDateTime = dto.finalSecondStartDateTime();
+        this.finalSecondEndDateTime = dto.finalSecondEndDateTime();
         return this;
     }
 

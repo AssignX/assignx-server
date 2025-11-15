@@ -13,22 +13,34 @@ public record ExamPeriodReqDTO(
         @NotBlank
         String semester,
         @NotNull
-        LocalDateTime midStartDateTime,
+        LocalDateTime midFirstStartDateTime,
         @NotNull
-        LocalDateTime midEndDateTime,
+        LocalDateTime midFirstEndDateTime,
         @NotNull
-        LocalDateTime finalStartDateTime,
+        LocalDateTime midSecondStartDateTime,
         @NotNull
-        LocalDateTime finalEndDateTime
+        LocalDateTime midSecondEndDateTime,
+        @NotNull
+        LocalDateTime finalFirstStartDateTime,
+        @NotNull
+        LocalDateTime finalFirstEndDateTime,
+        @NotNull
+        LocalDateTime finalSecondStartDateTime,
+        @NotNull
+        LocalDateTime finalSecondEndDateTime
 ) {
     public ExamPeriod toEntity() {
         return ExamPeriod.builder()
                 .year(year)
                 .semester(semester)
-                .midStartDateTime(midStartDateTime)
-                .midEndDateTime(midEndDateTime)
-                .finalStartDateTime(finalStartDateTime)
-                .finalEndDateTime(finalEndDateTime)
+                .midFirstStartDateTime(midFirstStartDateTime)
+                .midFirstEndDateTime(midFirstEndDateTime)
+                .midSecondStartDateTime(midSecondStartDateTime)
+                .midSecondEndDateTime(midSecondEndDateTime)
+                .finalFirstStartDateTime(finalFirstStartDateTime)
+                .finalFirstEndDateTime(finalFirstEndDateTime)
+                .finalSecondStartDateTime(finalSecondStartDateTime)
+                .finalSecondEndDateTime(finalSecondEndDateTime)
                 .build();
     }
 

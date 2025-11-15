@@ -15,23 +15,35 @@ public record ExamPeriodResDTO(
         @NotBlank
         String semester,
         @NotNull
-        LocalDateTime midStartDateTime,
+        LocalDateTime midFirstStartDateTime,
         @NotNull
-        LocalDateTime midEndDateTime,
+        LocalDateTime midFirstEndDateTime,
         @NotNull
-        LocalDateTime finalStartDateTime,
+        LocalDateTime midSecondStartDateTime,
         @NotNull
-        LocalDateTime finalEndDateTime
+        LocalDateTime midSecondEndDateTime,
+        @NotNull
+        LocalDateTime finalFirstStartDateTime,
+        @NotNull
+        LocalDateTime finalFirstEndDateTime,
+        @NotNull
+        LocalDateTime finalSecondStartDateTime,
+        @NotNull
+        LocalDateTime finalSecondEndDateTime
 ) {
     public static ExamPeriodResDTO fromEntity(ExamPeriod entity) {
         return ExamPeriodResDTO.builder()
                 .examPeriodId(entity.getId())
                 .year(entity.getYear())
                 .semester(entity.getSemester())
-                .midStartDateTime(entity.getMidStartDateTime())
-                .midEndDateTime(entity.getMidEndDateTime())
-                .finalStartDateTime(entity.getFinalStartDateTime())
-                .finalEndDateTime(entity.getFinalEndDateTime())
+                .midFirstStartDateTime(entity.getMidFirstStartDateTime())
+                .midFirstEndDateTime(entity.getMidFirstEndDateTime())
+                .midSecondStartDateTime(entity.getMidSecondStartDateTime())
+                .midSecondEndDateTime(entity.getMidSecondEndDateTime())
+                .finalFirstStartDateTime(entity.getFinalFirstStartDateTime())
+                .finalFirstEndDateTime(entity.getFinalFirstEndDateTime())
+                .finalSecondStartDateTime(entity.getFinalSecondStartDateTime())
+                .finalSecondEndDateTime(entity.getFinalSecondEndDateTime())
                 .build();
     }
 
