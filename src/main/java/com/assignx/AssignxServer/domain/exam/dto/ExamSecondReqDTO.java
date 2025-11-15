@@ -4,7 +4,7 @@ import com.assignx.AssignxServer.domain.exam.entity.ExamType;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public record ExamFirstReqDTO(
+public record ExamSecondReqDTO(
         @NotNull
         Long examId,
         @NotNull
@@ -14,6 +14,7 @@ public record ExamFirstReqDTO(
         @NotNull
         LocalDateTime endTime,
         @NotNull
-        boolean isApply
+        Long examRoomId
 ) {
+
 }

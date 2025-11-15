@@ -27,17 +27,19 @@ public class ExamController {
 
     private final ExamService examService;
 
+    @PreAuthorize("hasRole('PROFESSOR')")
     @PostMapping("/apply/first")
     @Operation(summary = "1차 신청")
-    public ResponseEntity<List<ExamResDTO>> firstApply(@Valid @RequestBody ExamFirstReqDTO dto) {
-        List<ExamResDTO> res = examService.firstApply(dto);
+    public ResponseEntity<ExamResDTO> firstApply(@Valid @RequestBody ExamFirstReqDTO dto) {
+        ExamResDTO res = examService.firstApply(dto);
         return ResponseEntity.ok(res);
     }
 
+    @PreAuthorize("hasRole('PROFESSOR')")
     @PostMapping("/apply/second")
     @Operation(summary = "2차 신청")
-    public ResponseEntity<List<ExamResDTO>> secondApply(@Valid @RequestBody ExamSecondReqDTO dto) {
-        List<ExamResDTO> res = examService.secondApply(dto);
+    public ResponseEntity<ExamResDTO> secondApply(@Valid @RequestBody ExamSecondReqDTO dto) {
+        ExamResDTO res = examService.secondApply(dto);
         return ResponseEntity.ok(res);
     }
 

@@ -24,13 +24,13 @@ Authorization: Bearer {{auth_token}}
   "year": "2025",
   "semester": "2",
   "midFirstStartDateTime": "2025-11-01T10:00:00",
-  "midFirstEndDateTime": "2025-11-01T10:00:00",
-  "midSecondStartDateTime": "2025-11-01T10:00:00",
-  "midSecondEndDateTime": "2025-11-01T10:00:00",
-  "finalFirstStartDateTime": "2025-11-01T10:00:00",
-  "finalFirstEndDateTime": "2025-11-01T10:00:00",
-  "finalSecondStartDateTime": "2025-11-01T10:00:00",
-  "finalSecondEndDateTime": "2025-11-01T10:00:00"
+  "midFirstEndDateTime": "2025-11-02T10:00:00",
+  "midSecondStartDateTime": "2025-11-03T10:00:00",
+  "midSecondEndDateTime": "2025-11-04T10:00:00",
+  "finalFirstStartDateTime": "2025-11-05T10:00:00",
+  "finalFirstEndDateTime": "2025-11-06T10:00:00",
+  "finalSecondStartDateTime": "2025-11-07T10:00:00",
+  "finalSecondEndDateTime": "2025-11-08T10:00:00"
 }
 
 > {%

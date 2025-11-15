@@ -41,4 +41,15 @@ public class ExamPeriodController {
         ExamPeriodResDTO res = examPeriodService.getExamPeriod(year, semester);
         return ResponseEntity.ok(res);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/test")
+    @Operation(summary = "테스트용 시험 신청 기간 설정", description = "테스트용 1차/2차 신청 기간을 설정합니다.")
+    public ResponseEntity<ExamPeriodResDTO> createTestExamPeriod(@RequestParam String year,
+                                                                 @RequestParam String semester,
+                                                                 @RequestParam String midFinal,
+                                                                 @RequestParam String firstSecond) {
+        ExamPeriodResDTO res = examPeriodService.createTestExamPeriod(year, semester, midFinal, firstSecond);
+        return ResponseEntity.ok(res);
+    }
 }

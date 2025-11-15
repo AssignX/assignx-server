@@ -1,7 +1,16 @@
 package com.assignx.AssignxServer.domain.exam.repository;
 
 import com.assignx.AssignxServer.domain.exam.entity.Exam;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface ExamRepository extends JpaRepository<Exam, Long> {
+    @Query("""
+                SELECT e FROM Exam e 
+                WHERE e.startTime < :endTime
+                  AND e.endTime > :startTime
+            """)
+    List<Exam> findAllOverlapping(LocalDateTime startTime, LocalDateTime endTime);
 }

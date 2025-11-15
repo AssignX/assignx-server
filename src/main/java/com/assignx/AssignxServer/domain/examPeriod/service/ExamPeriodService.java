@@ -8,6 +8,7 @@ import com.assignx.AssignxServer.domain.examPeriod.exception.ExamPeriodException
 import com.assignx.AssignxServer.domain.examPeriod.exception.ExamPeriodExceptionUtils;
 import com.assignx.AssignxServer.domain.examPeriod.repository.ExamPeriodRepository;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,15 +27,19 @@ public class ExamPeriodService {
      * @param dto 시험 신청 기간 생성에 필요한 데이터를 담고 있는 {@link ExamPeriodReqDTO} 객체.
      * @return 성공적으로 저장된 {@link ExamPeriodResDTO} 객체.
      */
+    @Transactional
     public ExamPeriodResDTO createExamPeriod(ExamPeriodReqDTO dto) {
         Optional<ExamPeriod> existing = examPeriodRepository.findByYearAndSemester(dto.year(), dto.semester());
         ExamPeriod examPeriod;
         if (existing.isPresent()) {
-            examPeriod = existing.get();
-            examPeriod = examPeriod.update(dto);
+            examPeriod = existing.get().update(dto);
         } else {
-            examPeriod = examPeriodRepository.save(dto.toEntity());
+            examPeriod = dto.toEntity();
         }
+
+        examPeriodRepository.save(examPeriod);
+        examPeriodRepository.flush();
+
         return ExamPeriodResDTO.fromEntity(examPeriod);
     }
 
@@ -114,5 +119,83 @@ public class ExamPeriodService {
                 default -> throw ExamPeriodExceptionUtils.UnknownExamPeriod(period);
             };
         };
+    }
+
+    /**
+     * 시험 신청 기간 테스트를 위한 메서드
+     *
+     * @param year        연도
+     * @param semester    학기
+     * @param midFinal    중간/기말고사 ("MID" 혹은 "FINAL")
+     * @param firstSecond 1차/2차 신청 ("1차" 혹은 "2차")
+     * @return
+     */
+    public ExamPeriodResDTO createTestExamPeriod(String year, String semester, String midFinal, String firstSecond) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime midFirstStartDateTime = null;
+        LocalDateTime midFirstEndDateTime = null;
+        LocalDateTime midSecondStartDateTime = null;
+        LocalDateTime midSecondEndDateTime = null;
+        LocalDateTime finalFirstStartDateTime = null;
+        LocalDateTime finalFirstEndDateTime = null;
+        LocalDateTime finalSecondStartDateTime = null;
+        LocalDateTime finalSecondEndDateTime = null;
+
+        if (midFinal.equals("MID")) {
+            if (firstSecond.equals("1차")) {
+                midFirstStartDateTime = now.with(LocalTime.MIN);
+                midFirstEndDateTime = now.plusDays(1).with(LocalTime.MAX);
+                midSecondStartDateTime = now.plusDays(2).with(LocalTime.MIN);
+                midSecondEndDateTime = now.plusDays(3).with(LocalTime.MAX);
+                finalFirstStartDateTime = now.plusDays(4).with(LocalTime.MIN);
+                finalFirstEndDateTime = now.plusDays(5).with(LocalTime.MAX);
+                finalSecondStartDateTime = now.plusDays(6).with(LocalTime.MIN);
+                finalSecondEndDateTime = now.plusDays(7).with(LocalTime.MAX);
+            } else if (firstSecond.equals("2차")) {
+                midFirstStartDateTime = now.minusDays(1).with(LocalTime.MIN);
+                midFirstEndDateTime = now.minusDays(1).with(LocalTime.MAX);
+                midSecondStartDateTime = now.with(LocalTime.MIN);
+                midSecondEndDateTime = now.plusDays(1).with(LocalTime.MAX);
+                finalFirstStartDateTime = now.plusDays(2).with(LocalTime.MIN);
+                finalFirstEndDateTime = now.plusDays(3).with(LocalTime.MAX);
+                finalSecondStartDateTime = now.plusDays(4).with(LocalTime.MIN);
+                finalSecondEndDateTime = now.plusDays(5).with(LocalTime.MAX);
+            }
+        } else if (midFinal.equals("FINAL")) {
+            if (firstSecond.equals("1차")) {
+                midFirstStartDateTime = now.minusDays(6).with(LocalTime.MIN);
+                midFirstEndDateTime = now.minusDays(5).with(LocalTime.MAX);
+                midSecondStartDateTime = now.minusDays(4).with(LocalTime.MIN);
+                midSecondEndDateTime = now.minusDays(3).with(LocalTime.MAX);
+                finalFirstStartDateTime = now.with(LocalTime.MIN);
+                finalFirstEndDateTime = now.plusDays(1).with(LocalTime.MAX);
+                finalSecondStartDateTime = now.plusDays(2).with(LocalTime.MIN);
+                finalSecondEndDateTime = now.plusDays(3).with(LocalTime.MAX);
+            } else if (firstSecond.equals("2차")) {
+                midFirstStartDateTime = now.minusDays(5).with(LocalTime.MIN);
+                midFirstEndDateTime = now.minusDays(4).with(LocalTime.MAX);
+                midSecondStartDateTime = now.minusDays(3).with(LocalTime.MIN);
+                midSecondEndDateTime = now.minusDays(2).with(LocalTime.MAX);
+                finalFirstStartDateTime = now.minusDays(1).with(LocalTime.MIN);
+                finalFirstEndDateTime = now.minusDays(1).with(LocalTime.MAX);
+                finalSecondStartDateTime = now.with(LocalTime.MIN);
+                finalSecondEndDateTime = now.plusDays(1).with(LocalTime.MAX);
+            }
+        }
+
+        ExamPeriodReqDTO dto = ExamPeriodReqDTO.builder()
+                .year(year)
+                .semester(semester)
+                .midFirstStartDateTime(midFirstStartDateTime)
+                .midFirstEndDateTime(midFirstEndDateTime)
+                .midSecondStartDateTime(midSecondStartDateTime)
+                .midSecondEndDateTime(midSecondEndDateTime)
+                .finalFirstStartDateTime(finalFirstStartDateTime)
+                .finalFirstEndDateTime(finalFirstEndDateTime)
+                .finalSecondStartDateTime(finalSecondStartDateTime)
+                .finalSecondEndDateTime(finalSecondEndDateTime)
+                .build();
+
+        return createExamPeriod(dto);
     }
 }
