@@ -6,6 +6,7 @@ import com.assignx.AssignxServer.domain.exam.dto.ExamSecondReqDTO;
 import com.assignx.AssignxServer.domain.exam.entity.Exam;
 import com.assignx.AssignxServer.domain.exam.exception.ExamExceptionUtils;
 import com.assignx.AssignxServer.domain.exam.repository.ExamRepository;
+import com.assignx.AssignxServer.domain.examPeriod.service.ExamPeriodService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,9 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ExamService {
 
+    private final ExamPeriodService examPeriodService;
     private final ExamRepository examRepository;
 
     public List<ExamResDTO> firstApply(ExamFirstReqDTO dto) {
+        examPeriodService.checkInApplyPeriod(dto.examType(), "1차");
         if (dto.examIds().isEmpty()) {
             throw ExamExceptionUtils.FirstApplyEmpty();
         }
