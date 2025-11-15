@@ -3,6 +3,7 @@ package com.assignx.AssignxServer.domain.exam.controller;
 import com.assignx.AssignxServer.domain.exam.dto.ExamFirstReqDTO;
 import com.assignx.AssignxServer.domain.exam.dto.ExamResDTO;
 import com.assignx.AssignxServer.domain.exam.dto.ExamSecondReqDTO;
+import com.assignx.AssignxServer.domain.exam.entity.ExamType;
 import com.assignx.AssignxServer.domain.exam.service.ExamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,4 +54,17 @@ public class ExamController {
                 examService.searchExam(year, semester, roomId, departmentId, professorId)
         );
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create")
+    @Operation(summary = "시험 목록 생성", description = "교수 매핑이 완료된 과목들의 시험 객체를 생성합니다.")
+    public ResponseEntity<Void> createExamObjects(
+            @RequestParam String year,
+            @RequestParam String semester,
+            @RequestParam ExamType examtype
+    ) {
+        examService.createExamObjects(year, semester, examtype);
+        return ResponseEntity.ok().build();
+    }
+
 }

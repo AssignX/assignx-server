@@ -1,0 +1,26 @@
+### POST 관리자 로그인
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "idNumber": "9999999999",
+  "password": "1234"
+}
+
+> {%
+    client.test("Login successful", function () {
+        client.assert(response.status === 200, "Login failed with status " + response.status);
+        client.assert(response.body.accessToken, "No accessToken found in response");
+    });
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+### POST 시험 목록 생성
+POST {{host}}/api/exam/create?year=2025&semester=2&examtype=MID
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
