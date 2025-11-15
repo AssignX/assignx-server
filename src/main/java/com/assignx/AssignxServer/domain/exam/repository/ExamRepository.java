@@ -6,9 +6,10 @@ import com.assignx.AssignxServer.domain.exam.entity.ExamType;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
-public interface ExamRepository extends JpaRepository<Exam, Long> {
+public interface ExamRepository extends JpaRepository<Exam, Long>, JpaSpecificationExecutor {
     @Query("""
                 SELECT e FROM Exam e 
                 WHERE e.startTime < :endTime

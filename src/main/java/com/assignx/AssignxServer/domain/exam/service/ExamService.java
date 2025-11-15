@@ -1,7 +1,9 @@
 package com.assignx.AssignxServer.domain.exam.service;
 
+import com.assignx.AssignxServer.domain.course.dto.CourseResDTO;
 import com.assignx.AssignxServer.domain.course.entity.Course;
 import com.assignx.AssignxServer.domain.course.repository.CourseRepository;
+import com.assignx.AssignxServer.domain.courseProfessor.entity.CourseProfessor;
 import com.assignx.AssignxServer.domain.exam.dto.ExamFirstReqDTO;
 import com.assignx.AssignxServer.domain.exam.dto.ExamResDTO;
 import com.assignx.AssignxServer.domain.exam.dto.ExamSecondReqDTO;
@@ -11,13 +13,19 @@ import com.assignx.AssignxServer.domain.exam.entity.ExamType;
 import com.assignx.AssignxServer.domain.exam.exception.ExamExceptionUtils;
 import com.assignx.AssignxServer.domain.exam.repository.ExamRepository;
 import com.assignx.AssignxServer.domain.examPeriod.service.ExamPeriodService;
+import com.assignx.AssignxServer.domain.member.entity.Member;
 import com.assignx.AssignxServer.domain.room.entity.Room;
 import com.assignx.AssignxServer.domain.room.exception.RoomExceptionUtils;
 import com.assignx.AssignxServer.domain.room.repository.RoomRepository;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,9 +103,56 @@ public class ExamService {
         }
     }
 
-
+    /**
+     * 다양한 검색 조건(연도/학기/강의실/학과/교수ID)을 기반으로 시험 목록을 조회합니다.
+     *
+     * @param year         (선택) 개설연도
+     * @param semester     (선택) 개설학기
+     * @param roomId       (선택) 강의실 ID
+     * @param departmentId (선택) 학과 ID
+     * @param professorId  (선택) 교수 ID
+     * @return 조회된 모든 {@link CourseResDTO} 객체 리스트.
+     */
     public List<ExamResDTO> searchExam(String year, String semester, Long roomId, Long departmentId, Long professorId) {
-        return null;
+        Specification<Exam> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            // Exam → Course 조인
+            Join<Exam, Course> courseJoin = root.join("course", JoinType.INNER);
+
+            // 개설연도
+            if (year != null && !year.isBlank()) {
+                predicates.add(cb.equal(courseJoin.get("year"), year));
+            }
+
+            // 학기
+            if (semester != null && !semester.isBlank()) {
+                predicates.add(cb.equal(courseJoin.get("semester"), semester));
+            }
+
+            // 강의실
+            if (roomId != null) {
+                predicates.add(cb.equal(courseJoin.join("room", JoinType.LEFT).get("id"), roomId));
+            }
+
+            // 학과
+            if (departmentId != null) {
+                predicates.add(cb.equal(courseJoin.join("department", JoinType.LEFT).get("id"), departmentId));
+            }
+
+            // 교수 조건
+            if (professorId != null) {
+                Join<Course, CourseProfessor> cpJoin = courseJoin.join("professors", JoinType.LEFT);
+                Join<CourseProfessor, Member> professorJoin = cpJoin.join("professor", JoinType.LEFT);
+                predicates.add(cb.equal(professorJoin.get("id"), professorId));
+            }
+
+            query.distinct(true); // 교수 조인으로 인한 중복 제거
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        List<Exam> exams = examRepository.findAll(spec);
+        return exams.stream().map(ExamResDTO::fromEntity).toList();
     }
 
     @Transactional

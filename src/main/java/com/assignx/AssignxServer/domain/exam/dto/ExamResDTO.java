@@ -3,6 +3,7 @@ package com.assignx.AssignxServer.domain.exam.dto;
 import com.assignx.AssignxServer.domain.exam.entity.Exam;
 import com.assignx.AssignxServer.domain.exam.entity.ExamAssigned;
 import com.assignx.AssignxServer.domain.exam.entity.ExamType;
+import com.assignx.AssignxServer.domain.room.entity.Room;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -26,13 +27,9 @@ public record ExamResDTO(
         String year,
         @NotBlank
         String semester,
-        @NotBlank
         String buildingName,
-        @NotBlank
         String roomNumber,
-        @NotBlank
         LocalDateTime startTime,
-        @NotBlank
         LocalDateTime endTime,
         @NotNull
         ExamType examType,
@@ -40,6 +37,14 @@ public record ExamResDTO(
         ExamAssigned examAssigned
 ) {
     public static ExamResDTO fromEntity(Exam exam) {
+
+        Room room = exam.getExamRoom();
+        String buildingName = null, roomNumber = null;
+        if (room != null) {
+            buildingName = room.getBuilding().getBuildingName();
+            roomNumber = room.getRoomNumber();
+        }
+
         return ExamResDTO.builder()
                 .examId(exam.getId())
                 .courseId(exam.getCourse().getId())
@@ -49,8 +54,8 @@ public record ExamResDTO(
                 .enrolledCount(exam.getCourse().getEnrolledCount())
                 .year(exam.getCourse().getYear())
                 .semester(exam.getCourse().getSemester())
-                .buildingName(exam.getExamRoom().getBuilding().getBuildingName())
-                .roomNumber(exam.getExamRoom().getRoomNumber())
+                .buildingName(buildingName)
+                .roomNumber(roomNumber)
                 .startTime(exam.getStartTime())
                 .endTime(exam.getEndTime())
                 .examType(exam.getExamType())
