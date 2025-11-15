@@ -1,0 +1,68 @@
+### POST 관리자 로그인
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "idNumber": "9999999999",
+  "password": "1234"
+}
+
+> {%
+    client.test("Login successful", function () {
+        client.assert(response.status === 200, "Login failed with status " + response.status);
+        client.assert(response.body.accessToken, "No accessToken found in response");
+    });
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+### POST 시험 신청 기간 추가
+POST {{host}}/api/exam-period
+Content-Type:application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "year": "2025",
+  "semester": "2",
+  "midFirstStartDateTime": "2025-11-01T10:00:00",
+  "midFirstEndDateTime": "2025-11-02T10:00:00",
+  "midSecondStartDateTime": "2025-11-03T10:00:00",
+  "midSecondEndDateTime": "2025-11-04T10:00:00",
+  "finalFirstStartDateTime": "2025-11-05T10:00:00",
+  "finalFirstEndDateTime": "2025-11-06T10:00:00",
+  "finalSecondStartDateTime": "2025-11-07T10:00:00",
+  "finalSecondEndDateTime": "2025-11-08T10:00:00"
+}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check created data", function () {
+        client.assert(response.body.year === "2025", "Field 'year' value mismatch.");
+        client.assert(response.body.semester === "2", "Field 'semester' value mismatch.");
+        client.assert(response.body.midFirstStartDateTime === "2025-11-01T10:00:00", "Field 'midFirstStartDateTime' value mismatch.");
+        client.assert(response.body.midFirstEndDateTime === "2025-11-01T10:00:00", "Field 'midFirstEndDateTime' value mismatch.");
+        client.assert(response.body.midSecondStartDateTime === "2025-11-01T10:00:00", "Field 'midSecondStartDateTime' value mismatch.");
+        client.assert(response.body.midSecondEndDateTime === "2025-11-01T10:00:00", "Field 'midSecondEndDateTime' value mismatch.");
+        client.assert(response.body.finalFirstStartDateTime === "2025-11-01T10:00:00", "Field 'finalFirstStartDateTime' value mismatch.");
+        client.assert(response.body.finalFirstEndDateTime === "2025-11-01T10:00:00", "Field 'finalFirstEndDateTime' value mismatch.");
+        client.assert(response.body.finalSecondStartDateTime === "2025-11-01T10:00:00", "Field 'finalSecondStartDateTime' value mismatch.");
+        client.assert(response.body.finalSecondEndDateTime === "2025-11-01T10:00:00", "Field 'finalSecondEndDateTime' value mismatch.");
+    })
+    client.global.set("exam_period_id", response.body.examPeriodId)
+%}
+
+### GET 시험 신청 기간 조회
+GET {{host}}/api/exam-period?year=2025&semester=2
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.year === "2025", "Field 'year' value mismatch.");
+        client.assert(response.body.semester === "2", "Field 'semester' value mismatch.");
+    })
+
+%}

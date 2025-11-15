@@ -3,6 +3,7 @@ package com.assignx.AssignxServer.domain.room.entity;
 import com.assignx.AssignxServer.domain.building.entity.Building;
 import com.assignx.AssignxServer.domain.course.entity.Course;
 import com.assignx.AssignxServer.domain.department.entity.Department;
+import com.assignx.AssignxServer.domain.exam.entity.Exam;
 import com.assignx.AssignxServer.domain.room.dto.RoomReqDTO;
 import com.assignx.AssignxServer.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -49,6 +50,9 @@ public class Room extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "room")
     private List<Course> courses;
+
+    @OneToMany(mappedBy = "examRoom")
+    private List<Exam> exams;
 
     @Builder
     public Room(String roomNumber, int roomCapacity, Building building) {

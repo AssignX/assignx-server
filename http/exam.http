@@ -1,0 +1,274 @@
+### POST 관리자 로그인
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "idNumber": "9999999999",
+  "password": "1234"
+}
+
+> {%
+    client.test("Login successful", function () {
+        client.assert(response.status === 200, "Login failed with status " + response.status);
+        client.assert(response.body.accessToken, "No accessToken found in response");
+    });
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+### POST 시험 목록 생성
+POST {{host}}/api/exam/create?year=2025&semester=2&examtype=MID
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### POST 테스트용 시험 신청 기간 설정
+POST {{host}}/api/exam-period/test?year=2025&semester=2&midFinal=MID&firstSecond=1차
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### POST 교수 로그인
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "idNumber": "2025100001",
+  "password": "1234"
+}
+
+> {%
+    client.test("Login successful", function () {
+        client.assert(response.status === 200, "Login failed with status " + response.status);
+        client.assert(response.body.accessToken, "No accessToken found in response");
+    });
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+### POST 1차 신청
+POST {{host}}/api/exam/apply/first
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "examId": 29,
+  "examType": "MID",
+  "startTime": "2025-12-12T12:00",
+  "endTime": "2025-12-12T13:00",
+  "isApply": true
+}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### GET 시험 목록 검색 (전체)
+GET {{host}}/api/exam/search
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.length > 0, "There is no data retrieved");
+    })
+%}
+
+
+### POST 관리자 로그인
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "idNumber": "9999999999",
+  "password": "1234"
+}
+
+> {%
+    client.test("Login successful", function () {
+        client.assert(response.status === 200, "Login failed with status " + response.status);
+        client.assert(response.body.accessToken, "No accessToken found in response");
+    });
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+### POST 테스트용 시험 신청 기간 설정
+POST {{host}}/api/exam-period/test?year=2025&semester=2&midFinal=MID&firstSecond=2차
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### POST 교수 로그인
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "idNumber": "2025100001",
+  "password": "1234"
+}
+
+> {%
+    client.test("Login successful", function () {
+        client.assert(response.status === 200, "Login failed with status " + response.status);
+        client.assert(response.body.accessToken, "No accessToken found in response");
+    });
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+### POST 1차 신청 에러 확인
+POST {{host}}/api/exam/apply/first
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "examId": 29,
+  "examType": "MID",
+  "startTime": "2025-12-12T12:00",
+  "endTime": "2025-12-12T13:00",
+  "isApply": true
+}
+
+> {%
+    client.test("Response status is 400", function () {
+        client.assert(response.status === 400, "Response status is not 400");
+    });
+%}
+
+### POST 2차 신청
+POST {{host}}/api/exam/apply/second
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "examId": 39,
+  "examType": "MID",
+  "startTime": "2025-12-12T13:00",
+  "endTime": "2025-12-12T14:00",
+  "examRoomId": 5
+}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### POST 2차 신청
+POST {{host}}/api/exam/apply/second
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "examId": 41,
+  "examType": "MID",
+  "startTime": "2025-12-12T11:30",
+  "endTime": "2025-12-12T13:00",
+  "examRoomId": 5
+}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.examAssigned === "WAITING_LOW_PRIORITY", "Priority should be LOW because of examId 29");
+    })
+%}
+
+### POST 2차 신청
+POST {{host}}/api/exam/apply/second
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "examId": 41,
+  "examType": "MID",
+  "startTime": "2025-12-12T13:30",
+  "endTime": "2025-12-12T15:00",
+  "examRoomId": 5
+}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.examAssigned === "WAITING_HIGH_PRIORITY", "Priority should be HIGH because of examId 39");
+    })
+%}
+
+### POST 관리자 로그인
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "idNumber": "9999999999",
+  "password": "1234"
+}
+
+> {%
+    client.test("Login successful", function () {
+        client.assert(response.status === 200, "Login failed with status " + response.status);
+        client.assert(response.body.accessToken, "No accessToken found in response");
+    });
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+### POST 2차 신청 마감
+POST {{host}}/api/exam/complete/second?year=2025&semester=2&examType=MID
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### GET 시험 목록 검색 (전체)
+GET {{host}}/api/exam/search
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.length > 0, "There is no data retrieved");
+    })
+%}
+
+### GET 시험 목록 검색 (교수 ID)
+GET {{host}}/api/exam/search?professorId=1
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.length === 2, "There is no data retrieved");
+    })
+%}
+
+### GET 시험 목록 검색 (개설연도, 개설학기, 강의실)
+GET {{host}}/api/exam/search?year=2025&semester=2&roomId=4
+
+> {%
+    client.test("Response status is 200", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.test("Check retrieved data", function () {
+        client.assert(response.body.length === 4, "There is no data retrieved");
+    })
+%}

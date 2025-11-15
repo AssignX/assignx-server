@@ -180,17 +180,19 @@ public class CourseService {
                 predicates.add(cb.equal(root.join("department", JoinType.LEFT).get("id"), departmentId));
             }
 
-            // CourseProfessor → Member 조인
-            Join<Object, Object> courseProfessorsJoin = root.join("professors", JoinType.LEFT);
-            Join<Object, Object> memberJoin = courseProfessorsJoin.join("professor", JoinType.LEFT);
-
-            // 교수명 검색
-            if (professorName != null && !professorName.isBlank()) {
-                predicates.add(cb.like(memberJoin.get("name"), "%" + professorName + "%"));
+            Join<Object, Object> memberJoin = null;
+            if ((professorName != null && !professorName.isBlank()) || professorId != null) {
+                Join<Object, Object> courseProfJoin = root.join("professors", JoinType.LEFT);
+                memberJoin = courseProfJoin.join("professor", JoinType.LEFT);
             }
 
-            // 교수 ID 검색
-            if (professorId != null) {
+            // 교수명
+            if (professorName != null && !professorName.isBlank() && memberJoin != null) {
+                predicates.add(cb.like(cb.lower(memberJoin.get("name")), "%" + professorName.toLowerCase() + "%"));
+            }
+
+            // 교수 ID
+            if (professorId != null && memberJoin != null) {
                 predicates.add(cb.equal(memberJoin.get("id"), professorId));
             }
 
