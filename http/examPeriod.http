@@ -23,10 +23,14 @@ Authorization: Bearer {{auth_token}}
 {
   "year": "2025",
   "semester": "2",
-  "midStartDateTime": "2025-11-01T10:00:00",
-  "midEndDateTime": "2025-11-01T10:00:00",
-  "finalStartDateTime": "2025-11-01T10:00:00",
-  "finalEndDateTime": "2025-11-01T10:00:00"
+  "midFirstStartDateTime": "2025-11-01T10:00:00",
+  "midFirstEndDateTime": "2025-11-01T10:00:00",
+  "midSecondStartDateTime": "2025-11-01T10:00:00",
+  "midSecondEndDateTime": "2025-11-01T10:00:00",
+  "finalFirstStartDateTime": "2025-11-01T10:00:00",
+  "finalFirstEndDateTime": "2025-11-01T10:00:00",
+  "finalSecondStartDateTime": "2025-11-01T10:00:00",
+  "finalSecondEndDateTime": "2025-11-01T10:00:00"
 }
 
 > {%
@@ -36,10 +40,14 @@ Authorization: Bearer {{auth_token}}
     client.test("Check created data", function () {
         client.assert(response.body.year === "2025", "Field 'year' value mismatch.");
         client.assert(response.body.semester === "2", "Field 'semester' value mismatch.");
-        client.assert(response.body.midStartDateTime === "2025-11-01T10:00:00", "Field 'midStartDateTime' value mismatch.");
-        client.assert(response.body.midEndDateTime === "2025-11-01T10:00:00", "Field 'midEndDateTime' value mismatch.");
-        client.assert(response.body.finalStartDateTime === "2025-11-01T10:00:00", "Field 'finalStartDateTime' value mismatch.");
-        client.assert(response.body.finalEndDateTime === "2025-11-01T10:00:00", "Field 'finalEndDateTime' value mismatch.");
+        client.assert(response.body.midFirstStartDateTime === "2025-11-01T10:00:00", "Field 'midFirstStartDateTime' value mismatch.");
+        client.assert(response.body.midFirstEndDateTime === "2025-11-01T10:00:00", "Field 'midFirstEndDateTime' value mismatch.");
+        client.assert(response.body.midSecondStartDateTime === "2025-11-01T10:00:00", "Field 'midSecondStartDateTime' value mismatch.");
+        client.assert(response.body.midSecondEndDateTime === "2025-11-01T10:00:00", "Field 'midSecondEndDateTime' value mismatch.");
+        client.assert(response.body.finalFirstStartDateTime === "2025-11-01T10:00:00", "Field 'finalFirstStartDateTime' value mismatch.");
+        client.assert(response.body.finalFirstEndDateTime === "2025-11-01T10:00:00", "Field 'finalFirstEndDateTime' value mismatch.");
+        client.assert(response.body.finalSecondStartDateTime === "2025-11-01T10:00:00", "Field 'finalSecondStartDateTime' value mismatch.");
+        client.assert(response.body.finalSecondEndDateTime === "2025-11-01T10:00:00", "Field 'finalSecondEndDateTime' value mismatch.");
     })
     client.global.set("exam_period_id", response.body.examPeriodId)
 %}
