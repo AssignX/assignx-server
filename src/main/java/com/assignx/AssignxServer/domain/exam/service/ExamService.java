@@ -116,4 +116,11 @@ public class ExamService {
             }
         }
     }
+
+    @Transactional
+    public void completeSecondExamPeriod(String year, String semester, ExamType examType) {
+        List<Exam> exams = examRepository.findAllByYearSemesterAndExamTypeAndAssigned(year, semester, examType,
+                ExamAssigned.WAITING_HIGH_PRIORITY);
+        exams.forEach(e -> e.setExamAssigned(ExamAssigned.COMPLETED_SECOND));
+    }
 }

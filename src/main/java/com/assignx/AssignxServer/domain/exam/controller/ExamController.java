@@ -69,4 +69,17 @@ public class ExamController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/complete/second")
+    @Operation(summary = "2차 신청 마감", description = "2차 신청 기간이 끝나 HIGH 상태인 신청들을 COMPLETE로 변경합니다.")
+    public ResponseEntity<Void> completeSecondExamPeriod(
+            @RequestParam String year,
+            @RequestParam String semester,
+            @RequestParam ExamType examType
+    ) {
+        examService.completeSecondExamPeriod(year, semester, examType);
+        return ResponseEntity.ok().build();
+    }
+
+
 }
