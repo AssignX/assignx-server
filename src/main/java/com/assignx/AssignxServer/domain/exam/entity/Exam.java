@@ -50,4 +50,12 @@ public class Exam {
         this.examRoom = examRoom;
     }
 
+    public void firstApply(boolean isApply) {
+        if (isApply) {
+            this.examAssigned = ExamAssigned.COMPLETED_FIRST;
+        } else {
+            this.examAssigned = ExamAssigned.NOT_YET;
+        }
+    }
+
 }
