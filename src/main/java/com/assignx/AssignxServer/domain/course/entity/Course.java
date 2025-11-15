@@ -2,6 +2,7 @@ package com.assignx.AssignxServer.domain.course.entity;
 
 import com.assignx.AssignxServer.domain.courseProfessor.entity.CourseProfessor;
 import com.assignx.AssignxServer.domain.department.entity.Department;
+import com.assignx.AssignxServer.domain.exam.entity.Exam;
 import com.assignx.AssignxServer.domain.room.entity.Room;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,6 +52,9 @@ public class Course {
 
     @OneToMany(mappedBy = "course")
     private List<CourseProfessor> professors;
+
+    @OneToMany(mappedBy = "course")
+    private List<Exam> exams;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
