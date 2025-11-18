@@ -81,6 +81,10 @@ public class MemberService {
         String[] nameList = totalPrfssNm.toString().split(",");
         List<Member> professors = new ArrayList<>();
         for (String name : nameList) {
+            // FIXME 교수 매핑 테스트를 위해 특정 교수 매핑을 건너뜀
+            if (name.equals("고석주") || name.equals("정창수")) {
+                continue;
+            }
             List<Member> searchRes = memberRepository.findByRoleAndName(Role.PROFESSOR, name);
             // 검색된 교수가 한 명 뿐이어야 바로 매핑 가능
             if (searchRes.size() == 1) {
