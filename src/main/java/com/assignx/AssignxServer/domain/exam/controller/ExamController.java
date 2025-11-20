@@ -81,5 +81,13 @@ public class ExamController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PostMapping("/confirm")
+    @Operation(summary = "2차 시험 일정 확정", description = "특정 시험의 일정을 확정합니다.")
+    public ResponseEntity<ExamResDTO> confirmExam(@Valid @RequestBody ExamSecondReqDTO dto) {
+        ExamResDTO res = examService.confirmExam(dto);
+        return ResponseEntity.ok(res);
+    }
+
 
 }

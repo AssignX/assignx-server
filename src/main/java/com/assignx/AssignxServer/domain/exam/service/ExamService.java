@@ -66,8 +66,15 @@ public class ExamService {
         // 자기 자신 제외
         overlapped.removeIf(e -> e.getId().equals(exam.getId()));
 
+        log.info("신청하는 시험: {} : {} ~ {}", dto.examId(), dto.startTime(), dto.endTime());
+
+        for (Exam e : overlapped) {
+            log.info("겹치는 시험: {} : {} ~ {}", e.getId(), e.getStartTime(), e.getEndTime());
+        }
+
         // 우선순위 계산
-        determineAssignmentStatus(exam, overlapped);
+        ExamAssigned priority = determineAssignmentStatus(exam, overlapped);
+        exam.setExamAssigned(priority);
         examRepository.save(exam);
 
         log.info("ExamID {}가 2차 신청하였습니다. (신청값: {})", exam.getId(), exam.getExamAssigned());
@@ -75,7 +82,7 @@ public class ExamService {
         return ExamResDTO.fromEntity(exam);
     }
 
-    private void determineAssignmentStatus(Exam exam, List<Exam> overlaps) {
+    private ExamAssigned determineAssignmentStatus(Exam exam, List<Exam> overlaps) {
         long myScore = exam.getCourse().getEnrolledCount();
 
         boolean hasHigher = overlaps.stream()
@@ -89,7 +96,7 @@ public class ExamService {
                 .anyMatch(e -> e.getCourse().getEnrolledCount() > myScore);
 
         if (hasHigher) {
-            exam.setExamAssigned(ExamAssigned.WAITING_LOW_PRIORITY);
+            return ExamAssigned.WAITING_LOW_PRIORITY;
         } else {
             // 기존에 WAITING_HIGH_PRIORITY 였던 시험을 WAITING_LOW_PRIORITY로 변경
             for (Exam e : overlaps) {
@@ -99,7 +106,7 @@ public class ExamService {
                     break;
                 }
             }
-            exam.setExamAssigned(ExamAssigned.WAITING_HIGH_PRIORITY);
+            return ExamAssigned.WAITING_HIGH_PRIORITY;
         }
     }
 
@@ -114,6 +121,7 @@ public class ExamService {
      * @return 조회된 모든 {@link CourseResDTO} 객체 리스트.
      */
     public List<ExamResDTO> searchExam(String year, String semester, Long roomId, Long departmentId, Long professorId) {
+        log.info("year: {}, semester: {}, professorId: {}", year, semester, professorId);
         Specification<Exam> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -177,5 +185,33 @@ public class ExamService {
         List<Exam> exams = examRepository.findAllByYearSemesterAndExamTypeAndAssigned(year, semester, examType,
                 ExamAssigned.WAITING_HIGH_PRIORITY);
         exams.forEach(e -> e.setExamAssigned(ExamAssigned.COMPLETED_SECOND));
+    }
+
+    public ExamResDTO confirmExam(ExamSecondReqDTO dto) {
+        log.info("confirm with exam id: {}", dto.examId());
+        Exam exam = examRepository.findById(dto.examId()).orElseThrow(ExamExceptionUtils::ExamNotFound);
+        Room examRoom = roomRepository.findById(dto.examRoomId()).orElseThrow(RoomExceptionUtils::RoomNotExist);
+
+        exam.secondApply(dto.startTime(), dto.endTime(), examRoom);
+
+        // 시간대가 겹치는 시험 조회
+        List<Exam> overlapped = examRepository.findAllOverlapping(
+                dto.startTime(), dto.endTime()
+        );
+
+        // 자기 자신 제외
+        overlapped.removeIf(e -> e.getId().equals(exam.getId()));
+
+        // 우선순위 계산
+        ExamAssigned priority = determineAssignmentStatus(exam, overlapped);
+        if (priority != ExamAssigned.WAITING_HIGH_PRIORITY) {
+            throw ExamExceptionUtils.ExamScheduleConflict();
+        }
+        exam.setExamAssigned(ExamAssigned.COMPLETED_SECOND);
+        examRepository.save(exam);
+
+        log.info("ExamID {}가 수정되었습니다.", exam.getId());
+
+        return ExamResDTO.fromEntity(exam);
     }
 }

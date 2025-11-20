@@ -82,7 +82,7 @@ public class MemberService {
         List<Member> professors = new ArrayList<>();
         for (String name : nameList) {
             // FIXME 교수 매핑 테스트를 위해 특정 교수 매핑을 건너뜀
-            if (name.equals("고석주") || name.equals("정창수")) {
+            if (name.equals("김명석") || name.equals("정창수")) {
                 continue;
             }
             List<Member> searchRes = memberRepository.findByRoleAndName(Role.PROFESSOR, name);
