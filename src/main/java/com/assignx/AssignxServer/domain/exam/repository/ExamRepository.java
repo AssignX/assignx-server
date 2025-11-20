@@ -1,5 +1,6 @@
 package com.assignx.AssignxServer.domain.exam.repository;
 
+import com.assignx.AssignxServer.domain.course.entity.Course;
 import com.assignx.AssignxServer.domain.exam.entity.Exam;
 import com.assignx.AssignxServer.domain.exam.entity.ExamAssigned;
 import com.assignx.AssignxServer.domain.exam.entity.ExamType;
@@ -25,4 +26,6 @@ public interface ExamRepository extends JpaRepository<Exam, Long>, JpaSpecificat
     List<Exam> findAllByYearSemesterAndExamTypeAndAssigned(
             String year, String semester, ExamType examType, ExamAssigned examAssigned
     );
+
+    Exam findByCourseAndExamType(Course course, ExamType examType);
 }

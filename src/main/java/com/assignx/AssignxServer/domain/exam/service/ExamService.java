@@ -170,6 +170,12 @@ public class ExamService {
             int professorCnt = course.getProfessorName().split(",").length;
             // TODO 실제로는 이름도 같은지 체크해야하지만 우선은 간단하게 size만 비교
             if (professorCnt == course.getProfessors().size()) {
+                // 이미 시험 객체가 존재한다면 continue
+                Exam existingExam = examRepository.findByCourseAndExamType(course, examType);
+                if (existingExam != null) {
+                    continue;
+                }
+
                 Exam exam = Exam.builder()
                         .course(course)
                         .examType(examType)
