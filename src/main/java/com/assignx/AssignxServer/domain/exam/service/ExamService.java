@@ -193,6 +193,7 @@ public class ExamService {
         exams.forEach(e -> e.setExamAssigned(ExamAssigned.COMPLETED_SECOND));
     }
 
+    @Transactional
     public ExamResDTO confirmExam(ExamSecondReqDTO dto) {
         log.info("confirm with exam id: {}", dto.examId());
         Exam exam = examRepository.findById(dto.examId()).orElseThrow(ExamExceptionUtils::ExamNotFound);
