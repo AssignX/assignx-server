@@ -27,6 +27,7 @@ public record ExamResDTO(
         String year,
         @NotBlank
         String semester,
+        Long roomId,
         String buildingName,
         String roomNumber,
         LocalDateTime startTime,
@@ -40,9 +41,11 @@ public record ExamResDTO(
 
         Room room = exam.getExamRoom();
         String buildingName = null, roomNumber = null;
+        Long roomId = null;
         if (room != null) {
             buildingName = room.getBuilding().getBuildingName();
             roomNumber = room.getRoomNumber();
+            roomId = room.getId();
         }
 
         return ExamResDTO.builder()
@@ -54,6 +57,7 @@ public record ExamResDTO(
                 .enrolledCount(exam.getCourse().getEnrolledCount())
                 .year(exam.getCourse().getYear())
                 .semester(exam.getCourse().getSemester())
+                .roomId(roomId)
                 .buildingName(buildingName)
                 .roomNumber(roomNumber)
                 .startTime(exam.getStartTime())
