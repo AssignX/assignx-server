@@ -140,7 +140,7 @@ public class ExamService {
 
             // 강의실
             if (roomId != null) {
-                predicates.add(cb.equal(courseJoin.join("room", JoinType.LEFT).get("id"), roomId));
+                predicates.add(cb.equal(root.join("examRoom", JoinType.LEFT).get("id"), roomId));
             }
 
             // 학과
