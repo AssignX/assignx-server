@@ -30,8 +30,7 @@ public class ExamPeriodController {
         ExamPeriodResDTO res = examPeriodService.createExamPeriod(dto);
         return ResponseEntity.ok(res);
     }
-
-    @PreAuthorize("hasRole('ADMIN')")
+    
     @GetMapping
     @Operation(summary = "시험 신청 기간 조회", description = "연도, 학기를 이용해 시험 신청 기간을 조회합니다.")
     public ResponseEntity<ExamPeriodResDTO> getExamPeriod(
