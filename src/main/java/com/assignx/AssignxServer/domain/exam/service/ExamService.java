@@ -60,7 +60,7 @@ public class ExamService {
 
         // 시간대가 겹치는 시험 조회
         List<Exam> overlapped = examRepository.findAllOverlapping(
-                dto.startTime(), dto.endTime()
+                dto.startTime(), dto.endTime(), examRoom
         );
 
         // 자기 자신 제외
@@ -121,7 +121,6 @@ public class ExamService {
      * @return 조회된 모든 {@link CourseResDTO} 객체 리스트.
      */
     public List<ExamResDTO> searchExam(String year, String semester, Long roomId, Long departmentId, Long professorId) {
-        log.info("year: {}, semester: {}, professorId: {}", year, semester, professorId);
         Specification<Exam> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -203,7 +202,7 @@ public class ExamService {
 
         // 시간대가 겹치는 시험 조회
         List<Exam> overlapped = examRepository.findAllOverlapping(
-                dto.startTime(), dto.endTime()
+                dto.startTime(), dto.endTime(), examRoom
         );
 
         // 자기 자신 제외
