@@ -174,7 +174,7 @@ Authorization: Bearer {{auth_token}}
   "examId": 41,
   "examType": "MID",
   "startTime": "2025-12-12T11:30",
-  "endTime": "2025-12-12T13:00",
+  "endTime": "2025-12-12T13:30",
   "examRoomId": 5
 }
 
@@ -195,9 +195,9 @@ Authorization: Bearer {{auth_token}}
 {
   "examId": 41,
   "examType": "MID",
-  "startTime": "2025-12-12T15:00",
-  "endTime": "2025-12-12T16:30",
-  "examRoomId": 5
+  "startTime": "2025-12-12T11:30",
+  "endTime": "2025-12-12T13:30",
+  "examRoomId": 6
 }
 
 > {%
@@ -307,6 +307,6 @@ GET {{host}}/api/exam/search?year=2025&semester=2&roomId=5
         client.assert(response.status === 200, "Response status is not 200");
     });
     client.test("Check retrieved data", function () {
-        client.assert(response.body.length === 6, "There is no data retrieved");
+        client.assert(response.body.length === 2, "There is no data retrieved");
     })
 %}

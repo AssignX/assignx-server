@@ -4,6 +4,7 @@ import com.assignx.AssignxServer.domain.course.entity.Course;
 import com.assignx.AssignxServer.domain.exam.entity.Exam;
 import com.assignx.AssignxServer.domain.exam.entity.ExamAssigned;
 import com.assignx.AssignxServer.domain.exam.entity.ExamType;
+import com.assignx.AssignxServer.domain.room.entity.Room;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,8 +16,9 @@ public interface ExamRepository extends JpaRepository<Exam, Long>, JpaSpecificat
                 SELECT e FROM Exam e 
                 WHERE e.startTime < :endTime
                   AND e.endTime > :startTime
+                  AND e.examRoom = :examRoom
             """)
-    List<Exam> findAllOverlapping(LocalDateTime startTime, LocalDateTime endTime);
+    List<Exam> findAllOverlapping(LocalDateTime startTime, LocalDateTime endTime, Room examRoom);
 
     @Query("SELECT e FROM Exam e " +
             "WHERE e.course.year = :year " +
