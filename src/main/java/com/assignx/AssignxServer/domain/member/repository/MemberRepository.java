@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    List<Member> findByRoleAndName(Role role, String name);
+    List<Member> findByRoleAndNameContainingIgnoreCase(Role role, String name);
 
     List<Member> findByRoleAndDepartment(Role role, Department department);
 
