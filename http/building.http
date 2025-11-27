@@ -98,7 +98,7 @@ GET {{host}}/api/building/{{created_building_id}}
 %}
 
 ### GET 건물 검색 (이름)
-GET {{host}}/api/building/search?name=테스트 건물
+GET {{host}}/api/building/search?name=테스트
 
 > {%
     client.test("Response status is 200", function () {

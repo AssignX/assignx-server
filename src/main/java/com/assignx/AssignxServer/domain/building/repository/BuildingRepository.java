@@ -6,13 +6,14 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface BuildingRepository extends JpaRepository<Building, Long> {
     Optional<Building> findByBuildingNameAndBuildingNumber(@NotBlank String s, @NotNull int i);
 
-    List<Building> findByBuildingName(String buildingName);
-
-    List<Building> findByBuildingNumber(int buildingNumber);
-
     List<Building> findByBuildingNameContaining(String buildingName);
+
+    @Query("SELECT b FROM Building b WHERE CAST(b.buildingNumber AS string) LIKE %:partialNumber%")
+    List<Building> findByBuildingNumberContaining(@Param("partialNumber") String partialNumber);
 }

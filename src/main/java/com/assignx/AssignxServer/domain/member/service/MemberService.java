@@ -33,7 +33,7 @@ public class MemberService {
 
         // 이름으로 조회한 경우
         if (name != null && !name.isBlank()) {
-            members = memberRepository.findByRoleAndName(Role.EMPLOYEE, name);
+            members = memberRepository.findByRoleAndNameContainingIgnoreCase(Role.EMPLOYEE, name);
         }
         // 소속으로 조회한 경우
         else if (departmentId != null) {
@@ -58,7 +58,7 @@ public class MemberService {
 
         // 이름으로 조회한 경우
         if (name != null && !name.isBlank()) {
-            members = memberRepository.findByRoleAndName(Role.PROFESSOR, name);
+            members = memberRepository.findByRoleAndNameContainingIgnoreCase(Role.PROFESSOR, name);
         }
         // 소속으로 조회한 경우
         else if (departmentId != null) {
@@ -85,7 +85,7 @@ public class MemberService {
             if (name.equals("김명석") || name.equals("정창수")) {
                 continue;
             }
-            List<Member> searchRes = memberRepository.findByRoleAndName(Role.PROFESSOR, name);
+            List<Member> searchRes = memberRepository.findByRoleAndNameContainingIgnoreCase(Role.PROFESSOR, name);
             // 검색된 교수가 한 명 뿐이어야 바로 매핑 가능
             if (searchRes.size() == 1) {
                 professors.add(searchRes.get(0));

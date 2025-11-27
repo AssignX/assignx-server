@@ -69,11 +69,11 @@ public class BuildingService {
 
         // 이름으로 조회한 경우
         if (name != null && !name.isBlank()) {
-            buildings = buildingRepository.findByBuildingName(name);
+            buildings = buildingRepository.findByBuildingNameContaining(name);
         }
         // 번호로 조회한 경우
         else if (number != null) {
-            buildings = buildingRepository.findByBuildingNumber(number);
+            buildings = buildingRepository.findByBuildingNumberContaining(String.valueOf(number));
         }
         // 조건이 없는 경우 빈 리스트 반환
         else {
