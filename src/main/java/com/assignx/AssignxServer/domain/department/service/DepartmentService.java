@@ -92,9 +92,8 @@ public class DepartmentService {
 
         // 학과 수정
         department.update(dto);
-
-        // TODO 직원 목록 수정
-        List<MemberResDTO> employees = new ArrayList<>();
+        
+        List<MemberResDTO> employees = memberService.getAllEmployeesByNameOrDepartment(null, department.getId());
 
         // 강의실 수정
         List<RoomResDTO> updatedRooms = roomService.updateDepartment(dto.roomIds(), department);
