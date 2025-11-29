@@ -8,6 +8,7 @@ import com.assignx.AssignxServer.domain.department.entity.Department;
 import com.assignx.AssignxServer.domain.department.exception.DepartmentExceptionUtils;
 import com.assignx.AssignxServer.domain.department.repository.DepartmentRepository;
 import com.assignx.AssignxServer.domain.member.dto.MemberResDTO;
+import com.assignx.AssignxServer.domain.member.service.MemberService;
 import com.assignx.AssignxServer.domain.room.dto.RoomResDTO;
 import com.assignx.AssignxServer.domain.room.service.RoomService;
 import jakarta.validation.Valid;
@@ -25,6 +26,7 @@ public class DepartmentService {
 
     private final DepartmentRepository departmentRepository;
     private final RoomService roomService;
+    private final MemberService memberService;
 
     /**
      * 새로운 학과를 추가합니다.
@@ -74,8 +76,7 @@ public class DepartmentService {
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(DepartmentExceptionUtils::DepartmentNotExist);
 
-        // TODO 학과에 소속된 직원 목록 조회
-        List<MemberResDTO> employees = new ArrayList<>();
+        List<MemberResDTO> employees = memberService.getAllEmployeesByNameOrDepartment(null, departmentId);
 
         // 학과에서 관리하는 강의실 목록 조회
         List<RoomResDTO> rooms = roomService.getRoomsByDepartment(department);
